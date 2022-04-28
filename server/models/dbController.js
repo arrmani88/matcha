@@ -9,5 +9,5 @@ try {
     })
     module.exports = dbController
 } catch (error) {
-    
+    console.log(err)
 }

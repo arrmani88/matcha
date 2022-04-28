@@ -6,12 +6,15 @@ const server = http.createServer(app);
 
 const users = require('./routes/users')
 const register = require('./routes/register')
+const login = require('./routes/login')
 
 app.use(express.json())
 app.use('/users', users)
 app.use('/register', register)
+app.use('/login', login)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
 
 // nodemon -x "clear;node" index.js
+// kol dfayer machtah bjoj .. machtah bel mesk ol3ker .. kol men chafo idahecher .. kol men daz 3lih ichem ri7t

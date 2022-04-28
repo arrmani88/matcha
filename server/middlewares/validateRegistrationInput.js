@@ -10,16 +10,16 @@ const validateRegistrationInput = (req, res, next) => {
 			return res.json({error: {'details': fieldIsNullMessage}})
 		} else if (!isName(firstname)) {
 			res.status(422)
-			return res.json({error: {"details": "Field 'firstname' isn't valid"}})
+			return res.json({error: {"details": "Invalid 'firstname' syntax"}})
 		} else if (!isName(lastname)) {
 			res.status(422)
-			return res.json({error: {"details": "Field 'lastname' isn't valid"}})
+			return res.json({error: {"details": "Invalid 'lastname' syntax"}})
 		} else if (!isUsername(username)) {
 			res.status(422)
-			return res.json({error: {"details": "Field 'username' isn't valid"}})
+			return res.json({error: {"details": "Invalid 'username' syntax"}})
 		} else if (!isEmail(email)) {
 			res.status(422)
-			return res.json({error: {"details": "Field 'email' isn't valid"}})
+			return res.json({error: {"details": "Invalid 'email' syntax"}})
 		} else if (!isPassword(password)) {
 			res.status(422)
 			return res.json({error: {"details": "Field 'password' should contain minimum 8 characters, at least one letter"}})
@@ -29,8 +29,11 @@ const validateRegistrationInput = (req, res, next) => {
 				[username, email],
 				(error, result) => { 
 					if (error) return console.log(error)
-					console.log('.........................................')
 					if (result.length == 0) return next()
+					else {
+						res.status(409)
+						return res.json({"Exception": {"Details": "Username or email already used"}})
+					}
 				}
 			)
 		}
