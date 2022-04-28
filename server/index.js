@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const users = require('./routes/users')
 const register = require('./routes/register')
 
+app.use(express.json())
 app.use('/users', users)
 app.use('/register', register)
 
