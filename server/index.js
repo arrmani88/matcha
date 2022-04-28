@@ -12,3 +12,6 @@ app.use('/users', users)
 app.use('/register', register)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
+
+
+// nodemon -x "clear;node" index.js
