@@ -5,5 +5,8 @@ CREATE TABLE `users` (
   `username` varchar(20) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
+  `gender` varchar(1) DEFAULT NULL,
+  `sexual preferences` char(1) DEFAULT NULL,
+  `biography` VARCHAR(65535) DEFAULT NULL,
   PRIMARY KEY (id)
 );
