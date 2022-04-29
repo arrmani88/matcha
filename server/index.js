@@ -17,4 +17,3 @@ server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
 
 // nodemon -x "clear;node" index.js
-// kol dfayer machtah bjoj .. machtah bel mesk ol3ker .. kol men chafo idahecher .. kol men daz 3lih ichem ri7t
