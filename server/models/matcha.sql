@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS `images` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `userId` int NOT NULL,
-  `profileImage` varbinary(2),
-  `profileImageExtenison` VARCHAR(2),
-  `userImages` varbinary(2),
-  `userImagesExtensions` varchar(10),
-  PRIMARY KEY (userId)
+  `isProfilePicture` bit,
+  `image` varbinary(4294967295) NOT NULL,
+  `imageExtenison` varchar(7) NOT NULL,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS `users` (
@@ -14,10 +14,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(20) NOT NULL,
   `email` varchar(60) NOT NULL,
   `isEmailConfirmed` bit DEFAULT 0,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(200) NOT NULL,
   `gender` varchar(1) DEFAULT NULL,
   `sexualPreferences` char(1) DEFAULT NULL,
-  `biography` varchar(65535) DEFAULT NULL,
+  `biography` varchar(200) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
