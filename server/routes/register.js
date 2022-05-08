@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
-const dbController = require('../models/dbController')
+const dbController = require('../models/db_controller')
 const { validateRegistrationInput } = require('../middlewares/validateRegistrationInput')
 
 router.post('/', validateRegistrationInput, (req, res) => {

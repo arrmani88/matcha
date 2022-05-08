@@ -1,5 +1,5 @@
 const { isName, isUsername, isEmail, isPassword } = require("../functions/inputValidation")
-const dbController = require("../models/dbController")
+const dbController = require("../models/db_controller")
 const fieldIsNullMessage = "One of the fields 'firstname', 'lastname', 'username', 'email' or 'password' is empty or wasn't sent"
 
 const validateRegistrationInput = (req, res, next) => {

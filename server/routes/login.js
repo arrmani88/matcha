@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { validateLoginInput } = require('../middlewares/validateLoginInput')
-const dbController = require('../models/dbController')
+const dbController = require('../models/db_controller')
 const { sign } = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
