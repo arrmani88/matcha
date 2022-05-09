@@ -4,18 +4,16 @@ const port = 3000
 const http = require("http");
 const server = http.createServer(app);
 
-const users = require('./routes/users')
 const register = require('./routes/register')
 const login = require('./routes/login')
-const uploadImage = require('./routes/upload_image')
+const completeProfile = require('./routes/complete_profile')
 
 app.use(express.json())
-app.use('/users', users)
 app.use('/register', register)
 app.use('/login', login)
-app.use('/upload_image', uploadImage)
+app.use('/complete_profile', completeProfile)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
 
-// nodemon -x "clear;node" index.js
+// nodemon -x "printf '\x1Bc';node" index.js

@@ -1,3 +1,6 @@
 routes/dbController: ach nder wast catch error
 wach darori t importi tables manuel men phpMyAdmin
-tying to send image trough postman
+
+a faire apres ----->
+profile completion yalah fiha gender, sexualPreferences, biography, chof pdf w ajouti chi lakhor
+dir had routes: complete profile, comment, like, upload_image

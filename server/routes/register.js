@@ -2,9 +2,9 @@ const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
 const dbController = require('../models/db_controller')
-const { validateRegistrationInput } = require('../middlewares/validateRegistrationInput')
+const validateRegistrationInput = require('../middlewares/validate_registration_input')
 
-router.post('/', validateRegistrationInput, (req, res) => {
+router.post('/', validateRegistrationInput, async (req, res) => {
     const { firstname, lastname, username, email, password } = req.body
     bcrypt.hash(password, 10).then((hash) => {
         dbController.query(
@@ -17,3 +17,4 @@ router.post('/', validateRegistrationInput, (req, res) => {
 })
 
 module.exports = router
+

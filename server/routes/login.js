@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { validateLoginInput } = require('../middlewares/validateLoginInput')
+const { validateLoginInput } = require('../middlewares/validate_login_input')
 const dbController = require('../models/db_controller')
 const { sign } = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
-router.post('/', validateLoginInput, (req, res) => {
+router.post('/', validateLoginInput, async (req, res) => {
     const { login, password } = req.body
     dbController.query(
         "SELECT * FROM users WHERE username = ? OR email = ?",
@@ -24,7 +24,7 @@ router.post('/', validateLoginInput, (req, res) => {
                     } else {
                         const accessToken = sign(
                             {username: result[0].username, id: result[0].id},
-                            'you just can\'t guess this random secret string'
+                            "you just can't guess this random secret string"
                         )
                         res.json({"accessToken": accessToken, "expires_in": "never"})
                     }

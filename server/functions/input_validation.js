@@ -17,5 +17,15 @@ function isPassword(password) {
 	const rgx = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/
 	return rgx.test(String(password))
 }
-	
-module.exports = { isName, isUsername, isEmail, isPassword }
+
+function isBirthday(date) {
+	const rgx = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/
+	return rgx.test(String(date))
+	// should be like this: 2022-05-28
+}
+
+function isGender(gender) {
+	return (gender == 'M' || gender == 'F' || gender == 'N')
+}
+
+module.exports = { isName, isUsername, isEmail, isPassword, isBirthday, isGender }

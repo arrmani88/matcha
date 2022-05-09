@@ -1,8 +1,8 @@
-const { isName, isUsername, isEmail, isPassword } = require("../functions/inputValidation")
+const { isName, isUsername, isEmail, isPassword } = require("../functions/input_validation")
 const dbController = require("../models/db_controller")
 const fieldIsNullMessage = "One of the fields 'firstname', 'lastname', 'username', 'email' or 'password' is empty or wasn't sent"
 
-const validateRegistrationInput = (req, res, next) => {
+const validateRegistrationInput = async (req, res, next) => {
 	try {
 		const { firstname, lastname, username, email, password } = req.body
 		if(!firstname || !lastname || !username || !email || !password) {
@@ -42,4 +42,4 @@ const validateRegistrationInput = (req, res, next) => {
 	}
 }
 
-module.exports = { validateRegistrationInput }
+module.exports = validateRegistrationInput
