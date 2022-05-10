@@ -23,3 +23,4 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 })
 
 module.exports = router
+
