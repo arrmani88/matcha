@@ -1,9 +1,27 @@
 const express = require('express')
 const router = express.Router()
-const { validateLoginInput } = require('../middlewares/validate_login_input')
 const dbController = require('../models/db_controller')
 const { sign } = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { isEmail, isUsername, isPassword } = require('../functions/input_validation')
+
+const validateLoginInput = async (req, res, next) => {
+    try {
+        const { login, password } = req.body
+        if (!login || !password) {
+            res.status(422)
+            return res.json({error: {"details" :"Required ('username' or 'email') and 'password' fields"}})
+        }
+        else if ((!isUsername(login) && !isEmail(login)) || !isPassword(password)) {
+            res.json(422)
+            return res.json({error: {"details": "Invalid login or password syntax"}})
+        } else {
+            next()
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 router.post('/', validateLoginInput, async (req, res) => {
     const { login, password } = req.body
