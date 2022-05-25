@@ -48,7 +48,6 @@ router.post('/', validateLoginInput, async (req, res) => {
                     }
                 })
             }
-            
         }
     )
 })

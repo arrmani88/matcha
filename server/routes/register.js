@@ -34,8 +34,7 @@ const validateRegistrationInput = async (req, res, next) => {
 					if (error) return console.log(error)
 					if (result.length == 0) return next()
 					else {
-						res.status(409)
-						return res.json({"Exception": {"Details": "Username or email already used"}})
+						return res.status(409).json({"Exception": {"Details": "Username or email already used"}})
 					}
 				}
 			)
@@ -58,3 +57,34 @@ router.post('/', validateRegistrationInput, async (req, res) => {
 })
 
 module.exports = router
+
+
+/*
+
+
+router.post('/', validateRegistrationInput, async (req, res) => {
+    const { firstname, lastname, username, email, password } = req.body
+    bcrypt.hash(password, 10).then((hashedPassword) => {
+        dbController.query(
+            "INSERT INTO users(firstname, lastname, username, email, password) VALUES(?,?,?,?,?);",
+            [firstname, lastname, username, email, hashedPassword],
+            (error) => { if (error) console.log(error) }
+        )
+		dbController.query(
+			"SELECT * FROM users WHERE username = ?",
+			[username],
+			(error, result) => {
+				if (error)  return res.json({'error': error})
+				else {
+					const accessToken = sign(
+						{ username: username, id: result[0].id },
+						"you just can't guess this random secret string"
+					)
+					return res.json({"accessToken": accessToken, "expires_in": "never"})
+				}
+			}
+		)
+    })
+})
+
+*/

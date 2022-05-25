@@ -1,0 +1,16 @@
+@hostname = http://localhost:3000
+
+# ------------------------------- REGISTER -------------------------------
+POST {{hostname}}/register
+Content-Type: application/json
+
+{
+    "firstname": "anas",
+    "lastname": "el boudali",
+    "username": "arrmani88",
+    "email": "a@a.com",
+    "password": "qweqwe123"
+}
+
+# password should contain minimum 8 characters, at least one letter
+# -------------------------------------------------------------------------

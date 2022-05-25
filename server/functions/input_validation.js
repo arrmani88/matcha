@@ -1,5 +1,5 @@
 function isName(name) {
-	const rgx = /^[a-zA-Z]{2,35}$/
+	const rgx = /^[a-zA-Z ]{2,35}$/
 	return rgx.test(String(name))
 }
 
