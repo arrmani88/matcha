@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const multer = require('multer')
+const validateToken = require('../middlewares/validate_token')
+const dbController = require('../models/db_controller')
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, 'images')
@@ -23,13 +25,17 @@ const upload = multer({
 	}
 }).single('profile_image')
 
-const validateToken = require('../middlewares/validate_token')
-
 router.post('/', validateToken, (req, res) => {
 	upload(req, res, (err) => {
 		if (err) {
 			return res.status(400).send({ error: err.message })
 		} else {
+			console.log(req.file.filename)
+			dbController.query(
+				"INSERT INTO images(uid, isProfilePicture, image) VALUES(?, ?, ?)",
+				[req.user.id, 1, req.file.filename],
+				(err) => { if (err) return res.json({ error: err }) }
+			)
 			res.send('image sent successfully ...')
 		}
 	})

@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const { sign } = require('jsonwebtoken')
 const { isName, isUsername, isEmail, isPassword } = require("../functions/input_validation")
 const dbController = require("../models/db_controller")
 const fieldIsNullMessage = "One of the fields 'firstname', 'lastname', 'username', 'email' or 'password' is empty or wasn't sent"
@@ -8,7 +9,7 @@ const fieldIsNullMessage = "One of the fields 'firstname', 'lastname', 'username
 const validateRegistrationInput = async (req, res, next) => {
 	try {
 		const { firstname, lastname, username, email, password } = req.body
-		if(!firstname || !lastname || !username || !email || !password) {
+		if (!firstname || !lastname || !username || !email || !password) {
 			res.status(422)
 			return res.json({error: {'details': fieldIsNullMessage}})
 		} else if (!isName(firstname)) {
@@ -44,23 +45,6 @@ const validateRegistrationInput = async (req, res, next) => {
 	}
 }
 
-router.post('/', validateRegistrationInput, async (req, res) => {
-    const { firstname, lastname, username, email, password } = req.body
-    bcrypt.hash(password, 10).then((hashedPassword) => {
-        dbController.query(
-            "INSERT INTO users(firstname, lastname, username, email, password) VALUES(?,?,?,?,?);",
-            [firstname, lastname, username, email, hashedPassword],
-            (error) => { if (error) console.log(error) }
-        )
-        res.send("Registered successfully")
-    })
-})
-
-module.exports = router
-
-
-/*
-
 
 router.post('/', validateRegistrationInput, async (req, res) => {
     const { firstname, lastname, username, email, password } = req.body
@@ -68,18 +52,19 @@ router.post('/', validateRegistrationInput, async (req, res) => {
         dbController.query(
             "INSERT INTO users(firstname, lastname, username, email, password) VALUES(?,?,?,?,?);",
             [firstname, lastname, username, email, hashedPassword],
-            (error) => { if (error) console.log(error) }
+            (error) => { if (error) return res.status(400).json(error) }
         )
 		dbController.query(
 			"SELECT * FROM users WHERE username = ?",
 			[username],
 			(error, result) => {
-				if (error)  return res.json({'error': error})
+				if (error) { return res.json({'error': error}) }
 				else {
 					const accessToken = sign(
 						{ username: username, id: result[0].id },
 						"you just can't guess this random secret string"
 					)
+					console.log(accessToken)
 					return res.json({"accessToken": accessToken, "expires_in": "never"})
 				}
 			}
@@ -87,4 +72,4 @@ router.post('/', validateRegistrationInput, async (req, res) => {
     })
 })
 
-*/
+module.exports = router

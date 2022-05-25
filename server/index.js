@@ -19,3 +19,4 @@ server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
 
 // nodemon -x "printf '\x1Bc';node" index.js
+// npm install -g --force nodemon

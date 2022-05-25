@@ -1,6 +1,6 @@
 @hostname = http://localhost:3000
 
-# ------------------------------- REGISTER -------------------------------
+### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
 Content-Type: application/json
 
@@ -12,5 +12,34 @@ Content-Type: application/json
     "password": "qweqwe123"
 }
 
-# password should contain minimum 8 characters, at least one letter
+# username: between 2 & 35 characters, and can be alphanumeric
+# password: minimum 8 characters, at least one letter
 # -------------------------------------------------------------------------
+### ---------------------------- COMPLETE PROFILE ----------------------------
+POST {{hostname}}/complete_profile
+Content-Type: application/json
+accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxMiwiaWF0IjoxNjUzNDk4MTUzfQ.XZmUzgGsdsjzE-AF1_zecYAEhvfnwTqigkiiQoTdzlI
+
+{
+    "birthday": "1997-10-25",
+    "gender": "M",
+    "sexualPreferences": "F",
+    "biography": "some description ...."
+}
+
+# 'birthday': should be like YYYY-MM-DD
+# 'gender': should be either 'M', 'F' or 'N' (if not specified)
+# 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
+# -------------------------------------------------------------------------
+### ---------------------------- LOGIN ----------------------------
+POST {{hostname}}/login
+Content-Type: application/json
+
+{
+    "login": "arrmani88",
+    "password": "qweqwe123"
+}
+
+# -------------------------------------------------------------------------
+### ---------------------------- UPLOAD PROFILE IMAGE ----------------------------
+
