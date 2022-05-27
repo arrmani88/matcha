@@ -31,15 +31,13 @@ const upload = multer({
 }).single('image')
 
 router.post('/', validateToken, (req, res) => {
-	const { isProfileImage } = req.body
-	console.log(isProfileImage)
 	upload(req, res, (err) => {
 		if (err) {
 			return res.status(400).send({ error: err.message })
 		} else {
 			dbController.query(
 				"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
-				[req.user.id, (isProfileImage == true ? 1 : 0), newImageName],
+				[req.user.id, 1, newImageName],
 				(err) => { if (err) {
 					return res.json({ error: err })
 				} else {
