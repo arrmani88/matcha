@@ -44,8 +44,7 @@ const validateRegistrationInput = async (req, res, next) => {
 		return console.log(error)
 	}
 }
-
-
+ 
 router.post('/', validateRegistrationInput, async (req, res) => {
     const { firstname, lastname, username, email, password } = req.body
     bcrypt.hash(password, 10).then((hashedPassword) => {

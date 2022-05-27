@@ -1,7 +1,7 @@
 const { verify } = require('jsonwebtoken')
 
 const validateToken = (req, res, next) => {
-    const accessToken = req.header('accessToken')
+    const accessToken = req.header('Authorization')
     if (!accessToken) {
         res.status(401)
         return res.json({"Exception": {"Details": "User not logged in, or no access token was provided in the header"}})

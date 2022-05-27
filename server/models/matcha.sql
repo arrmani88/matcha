@@ -17,9 +17,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 CREATE TABLE IF NOT EXISTS `images` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` int NOT NULL,
-  `isProfilePicture` bit,
-  `image` varbinary(4294967295) NOT NULL,
-  `imageExtenison` varchar(7) NOT NULL,
+  `isProfileImage` bit,
+  `image` varchar(55) NOT NULL,
   PRIMARY KEY (id)
 );
 

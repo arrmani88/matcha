@@ -2,14 +2,19 @@ const express = require('express')
 const router = express.Router()
 const path = require('path')
 const multer = require('multer')
+const crypto = require('crypto')
 const validateToken = require('../middlewares/validate_token')
 const dbController = require('../models/db_controller')
+let newImageName
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
 		cb(null, 'images')
 	},
 	filename: (req, file, cb) => {
-		cb(null, Date.now() + path.extname(file.originalname))
+		newImageName = Date.now() + "_" + 
+			crypto.createHash('md5').update(file.originalname).digest('hex') + 
+			path.extname(file.originalname)
+		cb(null, newImageName)
 	},
 })
 
@@ -19,24 +24,28 @@ const upload = multer({
 	fileFilter: (req, file, cb) => {
 		if (path.extname(file.originalname) != '.jpg' && path.extname(file.originalname) != '.png' && path.extname(file.originalname) != '.jpeg') {
 			return cb(Error("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file"))
-		} else {
+		} else { 
 			cb(null, true)
 		}
 	}
-}).single('profile_image')
+}).single('image')
 
 router.post('/', validateToken, (req, res) => {
+	const { isProfileImage } = req.body
+	console.log(isProfileImage)
 	upload(req, res, (err) => {
 		if (err) {
 			return res.status(400).send({ error: err.message })
 		} else {
-			console.log(req.file.filename)
 			dbController.query(
-				"INSERT INTO images(uid, isProfilePicture, image) VALUES(?, ?, ?)",
-				[req.user.id, 1, req.file.filename],
-				(err) => { if (err) return res.json({ error: err }) }
+				"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
+				[req.user.id, (isProfileImage == true ? 1 : 0), newImageName],
+				(err) => { if (err) {
+					return res.json({ error: err })
+				} else {
+					res.send('image sent successfully ...')
+				}}
 			)
-			res.send('image sent successfully ...')
 		}
 	})
 	

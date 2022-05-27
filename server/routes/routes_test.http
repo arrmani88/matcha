@@ -1,5 +1,5 @@
 @hostname = http://localhost:3000
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTM1ODY5NTN9.YKb6Ta2jF5yHZRM9CCBuXZSenf5-5vAlOFiF1acVe8E
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
 Content-Type: application/json
@@ -15,10 +15,20 @@ Content-Type: application/json
 # username: between 2 & 35 characters, and can be alphanumeric
 # password: minimum 8 characters, at least one letter
 # -------------------------------------------------------------------------
+### ---------------------------- LOGIN ----------------------------
+POST {{hostname}}/login
+Content-Type: application/json
+
+{
+    "login": "arrmani88",
+    "password": "qweqwe123"
+}
+
+# -------------------------------------------------------------------------
 ### ---------------------------- COMPLETE PROFILE ----------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json
-accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxMiwiaWF0IjoxNjUzNDk4MTUzfQ.XZmUzgGsdsjzE-AF1_zecYAEhvfnwTqigkiiQoTdzlI
+Authorization: {{token}}
 
 {
     "birthday": "1997-10-25",
@@ -31,15 +41,15 @@ accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OC
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
 # -------------------------------------------------------------------------
-### ---------------------------- LOGIN ----------------------------
-POST {{hostname}}/login
-Content-Type: application/json
-
-{
-    "login": "arrmani88",
-    "password": "qweqwe123"
-}
-
-# -------------------------------------------------------------------------
 ### ---------------------------- UPLOAD PROFILE IMAGE ----------------------------
+POST {{hostname}}/upload_profile_image
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=boundary
 
+--boundary
+Content-Disposition: form-data; name="image"; filename="283891763_2253368704819374_4283657699898836310_n.jpg"
+
+< /Users/anel-bou/Desktop/283891763_2253368704819374_4283657699898836310_n.jpg
+--boundary--
+# image should be either '.jpg', '.jpeg', or '.png', and less than 1000000 bytes (1MB)
+### 
