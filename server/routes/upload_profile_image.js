@@ -20,10 +20,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({
 	storage: storage,
-	limits: { fieldSize: 1000000 },
+	limits: { fieldSize: 1 * 1024 * 1024 },
 	fileFilter: (req, file, cb) => {
 		if (path.extname(file.originalname) != '.jpg' && path.extname(file.originalname) != '.png' && path.extname(file.originalname) != '.jpeg') {
-			return cb(Error("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file"))
+			return cb("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file")
 		} else { 
 			cb(null, true)
 		}
@@ -32,20 +32,18 @@ const upload = multer({
 
 router.post('/', validateToken, (req, res) => {
 	upload(req, res, (err) => {
-		if (err) {
-			return res.status(400).send({ error: err.message })
-		} else {
+		if (err) return res.status(400).send({ error: err.message })
+		else
 			dbController.query(
 				"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
 				[req.user.id, 1, newImageName],
-				(err) => { if (err) {
-					return res.json({ error: err })
-				} else {
-					res.send('image sent successfully ...')
-				}}
+				(err) => {
+					if (err) res.json({ error: err }).end()
+					else res.send('image sent successfully ...')
+				}
 			)
 		}
-	})
+	)
 	
 })
 

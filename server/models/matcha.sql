@@ -4,13 +4,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `lastname` varchar(35) NOT NULL,
   `username` varchar(20) NOT NULL,
   `email` varchar(60) NOT NULL,
-  `isEmailConfirmed` bit DEFAULT 0,
+  `isAccountConfirmed` bit DEFAULT 0,
   `password` varchar(200) NOT NULL,
   `birthday` varchar(10) DEFAULT NULL,
   `gender` varchar(1) DEFAULT NULL,
   `sexualPreferences` char(1) DEFAULT NULL,
   `biography` varchar(200) DEFAULT NULL,
   `tags` varchar(255) DEFAULT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
@@ -19,6 +21,8 @@ CREATE TABLE IF NOT EXISTS `images` (
   `uid` int NOT NULL,
   `isProfileImage` bit,
   `image` varchar(55) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
@@ -26,6 +30,8 @@ CREATE TABLE IF NOT EXISTS `likes` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` int NOT NULL,
   `imageId` int not NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 
@@ -34,5 +40,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `uid` int NOT NULL,
   `content` varchar(65535) NOT NULL, 
   `imageId` int NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );

@@ -3,8 +3,7 @@ const { verify } = require('jsonwebtoken')
 const validateToken = (req, res, next) => {
     const accessToken = req.header('Authorization')
     if (!accessToken) {
-        res.status(401)
-        return res.json({"Exception": {"Details": "User not logged in, or no access token was provided in the header"}})
+        return res.status(401).json({"Exception": {"Details": "User not logged in, or no access token was provided in the header"}}).end()
     }
     try {
         const decodedUser = verify(accessToken, "you just can't guess this random secret string")
@@ -13,7 +12,7 @@ const validateToken = (req, res, next) => {
             next()
         }
     } catch (err) {
-        return res.json({error: err})
+        return res.json({error: err}).end()
     }
 
 }

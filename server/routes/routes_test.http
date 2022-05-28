@@ -47,9 +47,26 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="image"; filename="283891763_2253368704819374_4283657699898836310_n.jpg"
+Content-Disposition: form-data; name="image"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
 
-< /Users/anel-bou/Desktop/283891763_2253368704819374_4283657699898836310_n.jpg
+< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1000000 bytes (1MB)
-### 
+# -------------------------------------------------------------------------
+
+
+
+
+### ---------------------------- UPLOAD FEED IMAGES ----------------------------
+POST {{hostname}}/upload_feed_images
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+
+< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+--boundary--
+
+
+### -------------------------------------------------------------------------
