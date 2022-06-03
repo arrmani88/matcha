@@ -1,4 +1,6 @@
 const { verify } = require('jsonwebtoken')
+const dotenv = require("dotenv")
+dotenv.config()
 
 const validateToken = (req, res, next) => {
     const accessToken = req.header('Authorization')
@@ -6,7 +8,7 @@ const validateToken = (req, res, next) => {
         return res.status(401).json({"Exception": {"Details": "User not logged in, or no access token was provided in the header"}}).end()
     }
     try {
-        const decodedUser = verify(accessToken, "you just can't guess this random secret string")
+        const decodedUser = verify(accessToken, process.env.REGISTRATION_RANDOM_STR)
         if (decodedUser) {
             req.user = decodedUser
             next()

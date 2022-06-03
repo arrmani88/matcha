@@ -1,5 +1,6 @@
 @hostname = http://localhost:3000
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTM1ODY5NTN9.YKb6Ta2jF5yHZRM9CCBuXZSenf5-5vAlOFiF1acVe8E
+
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
 Content-Type: application/json
@@ -7,7 +8,7 @@ Content-Type: application/json
 {
     "firstname": "anas",
     "lastname": "el boudali",
-    "username": "arrmani88",
+    "username": "abrrmani88",
     "email": "a@a.com",
     "password": "qweqwe123"
 }
@@ -15,6 +16,7 @@ Content-Type: application/json
 # username: between 2 & 35 characters, and can be alphanumeric
 # password: minimum 8 characters, at least one letter
 # -------------------------------------------------------------------------
+
 ### ---------------------------- LOGIN ----------------------------
 POST {{hostname}}/login
 Content-Type: application/json
@@ -41,6 +43,7 @@ Authorization: {{token}}
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
 # -------------------------------------------------------------------------
+
 ### ---------------------------- UPLOAD PROFILE IMAGE ----------------------------
 POST {{hostname}}/upload_profile_image
 Authorization: {{token}}
@@ -54,9 +57,6 @@ Content-Disposition: form-data; name="image"; filename="158436118_19083791193183
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1000000 bytes (1MB)
 # -------------------------------------------------------------------------
 
-
-
-
 ### ---------------------------- UPLOAD FEED IMAGES ----------------------------
 POST {{hostname}}/upload_feed_images
 Authorization: {{token}}
@@ -64,9 +64,16 @@ Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
 Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+Content-Type: image/jpeg
+
+< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+--boundary
+Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+Content-Type: image/jpeg
 
 < /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
 --boundary--
-
-
+# key-> images
+# value-> between 1 and 4 images
+# each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
 ### -------------------------------------------------------------------------

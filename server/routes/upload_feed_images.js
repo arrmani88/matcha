@@ -23,8 +23,6 @@ const multi_upload = multer({
 	storage,
 	limits: { fileSize: 1 * 1024 * 1024 }, //1MB
 	fileFilter: (req, file, cb) => {
-		console.log('mimetype=' + file.mimetype)
-		console.log('filename=' + file.originalname)
 		if (file.mimetype != 'image/jpg' && file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') {
 			return cb("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file")
 		} else {
@@ -37,7 +35,6 @@ router.post('/', validateToken, (req, res) => {
 	let isErrorFound = 0
 	req.newFilesNames = []
 	multi_upload(req, res, (err) => {
-		console.log(req.newFilesNames)
 		if (err) {
 			isErrorFound = 1
 			res.status(400).json(err).end()

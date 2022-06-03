@@ -1,6 +1,6 @@
 routes/dbController: ach nder wast catch error
-wach darori t importi tables manuel men phpMyAdmin
 
-a faire apres ----->
-profile completion yalah fiha gender, sexualPreferences, biography, chof pdf w ajouti chi lakhor
-dir had routes: complete profile, comment, like, upload_image
+
+# knt kandir: {
+    chof wach profile completed 9bel mat allowi user idir aya haja
+}
