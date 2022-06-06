@@ -11,7 +11,7 @@ router.get('/:emailConfirmationToken', async (req, res) => {
         const emailConfirmationToken = req.params.emailConfirmationToken
         const decodedData = verify(emailConfirmationToken, process.env.EMAIL_CONFIRMATION_RANDOM_STRING)
         if (decodedData) {
-            // console.log(decodedData) // { username: 'arrmani88', id: 24, iat: 1654214198 } 
+            // console.log(decodedData) // { username: 'arrmani88',  id: 24, iat: 1654214198 } 
             dbController.query(
                 "UPDATE users SET isAccountConfirmed = ? WHERE id = ?",
                 [1, decodedData.id],
@@ -38,4 +38,3 @@ router.get('/:emailConfirmationToken', async (req, res) => {
 })
 
 module.exports = router
-
