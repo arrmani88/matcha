@@ -1,10 +1,9 @@
-const { verify } = require('jsonwebtoken')
+const { verify, sign } = require('jsonwebtoken')
 const express = require('express')
 const router = express.Router()
 const dotenv = require("dotenv")
 dotenv.config()
 const dbController = require('../models/db_controller')
-const { sign } = require('jsonwebtoken')
 
 router.get('/:emailConfirmationToken', async (req, res) => {
     try {

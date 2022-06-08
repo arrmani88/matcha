@@ -89,8 +89,8 @@ router.post('/', async (req, res) => {
 							},
 							(err, info) => {
 								console.log(`http://localhost:3000/confirm_email/${emailConfirmationToken}`)
-								if (err) return res.status(400).json({ error: err.stack })
-								else return res.json("Account created successfully, we sent you a mail to confirm your email address, please check your inbox")
+								if (err) res.status(400).json({ error: err.stack })
+								else res.json("Account created successfully, we sent you a mail to confirm your email address, please check your inbox")
 							}
 						)
 					} catch (err) {
