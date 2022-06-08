@@ -20,7 +20,7 @@ router.get('/:emailConfirmationToken', async (req, res) => {
                     else { 
                         const accessToken = sign(
 							{ username: decodedData.username, id: decodedData.id },
-							process.env.REGISTRATION_RANDOM_STR
+							process.env.LOGIN_RANDOM_STRING
 						)
                         res.json({
                             message: `Account email confirmed successfully id=${decodedData.id}`,

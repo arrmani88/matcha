@@ -8,7 +8,7 @@ const validateToken = (req, res, next) => {
 		return res.status(401).json({"Exception": {"Details": "User not logged in, or no access token was provided in the header"}}).end()
 	}
 	try {
-		const decodedUser = verify(accessToken, process.env.REGISTRATION_RANDOM_STR)
+		const decodedUser = verify(accessToken, process.env.LOGIN_RANDOM_STRING)
 		if (decodedUser) {
 			req.user = decodedUser
 			next()

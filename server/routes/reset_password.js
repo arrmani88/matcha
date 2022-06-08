@@ -24,7 +24,6 @@ router.get('/', (req, res) => {
 		{ username },
 		process.env.PASSWORD_RESET_RANDOM_STRING
 	)
-	console.log(`http://localhost:3000/reset_password/${resetPasswordToken}`)
 	let sentEmail = transporter.sendMail(
 		{
 			from: process.env.EMAIL_ADDR,
@@ -45,19 +44,31 @@ router.post('/:token', (req, res) => {
 	const token = req.params.token
 	const { password } = req.body
 	const decodedData = verify(token, process.env.PASSWORD_RESET_RANDOM_STRING)
-	bcrypt.hash(password, 10).then((hashedPassword) => {
-		dbController.query(
-			"UPDATE users SET password = ? WHERE username = ?",
-			[hashedPassword, decodedData.username],
-			(err) => {
-				if (err) res.status(400).json({ error: error, description: err.message })
-				else {
-
-				}
+	dbController.query(
+		"SELECT * FROM users WHERE username = ? LIMIT 1",
+		[decodedData.username],
+		(err, result) => {
+			if (err) res.status(400).json({ error: error, description: err.message })
+			else {
+				bcrypt.hash(password, 10).then((hashedPassword) => {
+					dbController.query(
+						"UPDATE users SET password = ? WHERE username = ?",
+						[hashedPassword, decodedData.username],
+						(err) => {
+							if (err) res.status(400).json({ error: error, description: err.message })
+							else {
+								const accessToken = sign(
+									{username: decodedData.username, id: result[0].id},
+									process.env.LOGIN_RANDOM_STRING
+								)
+								res.json({"accessToken": accessToken, "expires_in": "never"})
+							}
+						}
+					)
+				})
 			}
-		)
-	})
-
+		}
+	)
 })
 
 module.exports = router

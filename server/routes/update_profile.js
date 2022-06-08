@@ -1,22 +1,30 @@
 const express = require('express')
 const router = express.Router()
 const dbController = require('../models/db_controller')
+const validateToken = require('../middlewares/validate_token.js')
+const isAccountComplete = require('../middlewares/is_account_complete.js')
+const confirmIdentityWithPassword = require('../middlewares/confirm_identity_with_password.js')
 
-router.post('/', (req, res) => {
+const getArrayOfUpdatedFields = () => {
+	
+}
+
+router.post('/',validateToken,confirmIdentityWithPassword, isAccountComplete,  (req, res) => {
 	try {
+		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = req.body
 		dbController.query(
 			"UPDATE users SET" +
-				((firstname != null) ? "firstname = ?" : "") + 
-				((lastname != null) ? "lastname = ?" : "") + 
-				((username != null) ? "username = ?" : "") + 
-				((email != null) ? "email = ?" : "") + 
-				((password != null) ? "password = ?" : "") + 
-				((birthday != null) ? "birthday = ?" : "") + 
-				((gender != null) ? "gender = ?" : "") + 
-				((sexualPreferences != null) ? "sexualPreferences = ?" : "") + 
-				((biography != null) ? "biography = " : "") + 
+				(newFirstname != null ? "firstname = ?" : "") + 
+				(newLastname != null ? "lastname = ?" : "") + 
+				(newUsername != null ? "username = ?" : "") + 
+				(newEmail != null ? "email = ?" : "") + 
+				(newPassword != null ? "password = ?" : "") + 
+				(newBirthday != null ? "birthday = ?" : "") + 
+				(newGender != null ? "gender = ?" : "") + 
+				(newSexualPreferences != null ? "sexualPreferences = ?" : "") + 
+				(newBiography != null ? "biography = " : "") + 
 				"WHERE id = ?",
-			[firstname, lastname, username, email, password, birthday, gender, sexualPreferences, biography, id],
+			[newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, req.user.id],
 			(err) => { if (err) res.send({ error: err }) }
 		)
 	} catch (err) {

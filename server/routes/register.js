@@ -16,31 +16,31 @@ const validateRegistrationInput = async (req, res, next) => {
 		const { firstname, lastname, username, email, password } = req.body
 		if (!firstname || !lastname || !username || !email || !password) {
 			res.status(422)
-			return res.json({error: {'details': fieldIsNullMessage}})
+			return res.json({ error: { 'details': fieldIsNullMessage } })
 		} else if (!isName(firstname)) {
 			res.status(422)
-			return res.json({error: {"details": "Invalid 'firstname' syntax"}})
+			return res.json({ error: { "details": "Invalid 'firstname' syntax" } })
 		} else if (!isName(lastname)) {
 			res.status(422)
-			return res.json({error: {"details": "Invalid 'lastname' syntax"}})
+			return res.json({ error: { "details": "Invalid 'lastname' syntax" } })
 		} else if (!isUsername(username)) {
 			res.status(422)
-			return res.json({error: {"details": "Invalid 'username' syntax"}})
+			return res.json({ error: { "details": "Invalid 'username' syntax" } })
 		} else if (!isEmail(email)) {
 			res.status(422)
-			return res.json({error: {"details": "Invalid 'email' syntax"}})
+			return res.json({ error: { "details": "Invalid 'email' syntax" } })
 		} else if (!isPassword(password)) {
 			res.status(422)
-			return res.json({error: {"details": "Field 'password' should contain minimum 8 characters, at least one letter"}})
+			return res.json({ error: { "details": "Field 'password' should contain minimum 8 characters, at least one letter" } })
 		} else {
 			dbController.query(
 				"SELECT * FROM users WHERE username LIKE ? OR email LIKE ? LIMIT 1",
 				[username, email],
-				(error, result) => { 
+				(error, result) => {
 					if (error) return console.log(error)
 					if (result.length == 0) return next()
 					else {
-						return res.status(409).json({"Exception": {"Details": "Username or email already used"}})
+						return res.status(409).json({ "Exception": { "Details": "Username or email already used" } })
 					}
 				}
 			)
@@ -52,7 +52,7 @@ const validateRegistrationInput = async (req, res, next) => {
 
 let transporter = nodemailer.createTransport({
 	host: 'smtp.ethereal.email',
-    port: 587,
+	port: 587,
 	auth: {
 		user: process.env.EMAIL_ADDR,
 		pass: process.env.EMAIL_PASS
@@ -61,18 +61,18 @@ let transporter = nodemailer.createTransport({
 
 // router.post('/', validateRegistrationInput, async (req, res) => {
 router.post('/', async (req, res) => {
-    const { firstname, lastname, username, email, password } = req.body
-    bcrypt.hash(password, 10).then((hashedPassword) => {
-        dbController.query(
-            "INSERT INTO users(firstname, lastname, username, email, password) VALUES(?,?,?,?,?);",
-            [firstname, lastname, username, email, hashedPassword],
-            (error) => { if (error) return res.status(400).json(error) }
-        )
+	const { firstname, lastname, username, email, password } = req.body
+	bcrypt.hash(password, 10).then((hashedPassword) => {
+		dbController.query(
+			"INSERT INTO users(firstname, lastname, username, email, password) VALUES(?,?,?,?,?);",
+			[firstname, lastname, username, email, hashedPassword],
+			(error) => { if (error) return res.status(400).json(error) }
+		)
 		dbController.query(
 			"SELECT * FROM users WHERE username = ?",
 			[username],
 			async (error, result) => {
-				if (error) { return res.json({'error': error}) }
+				if (error) { return res.json({ 'error': error }) }
 				else {
 					try {
 						const emailConfirmationToken = sign(
@@ -99,7 +99,7 @@ router.post('/', async (req, res) => {
 				}
 			}
 		)
-    })
+	})
 })
 
 module.exports = router

@@ -76,4 +76,22 @@ Content-Type: image/jpeg
 # key-> images
 # value-> between 1 and 4 images
 # each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
-### -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+### ----------------------- SEND RESET PASSWORD EMAIL ----------------------
+GET {{hostname}}/reset_password
+Content-Type: application/json
+
+{
+    "username": "arrmani88"
+}
+
+# -------------------------------------------------------------------------
+### -------------------------- RESET PASSWORD -------------------------
+POST {{hostname}}/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlhdCI6MTY1NDY4MzM4NH0.ScWgLpm9sEQxv3cESVgjAoVRlWMH_AJri3FuLmL3HuE
+Content-Type: application/json
+
+{
+    "password": "123123qwe"
+}
+
+# -------------------------------------------------------------------------

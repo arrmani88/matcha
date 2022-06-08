@@ -45,7 +45,7 @@ router.post('/', validateLoginInput, async (req, res) => {
 					} else {
 						const accessToken = sign(
 							{username: result[0].username, id: result[0].id},
-							"you just can't guess this random secret string"
+							process.env.LOGIN_RANDOM_STRING
 						)
 						res.json({"accessToken": accessToken, "expires_in": "never"})
 					}

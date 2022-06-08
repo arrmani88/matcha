@@ -2,7 +2,7 @@ const mysql = require('mysql')
 
 try {
     const dbController = mysql.createConnection({
-        host: '192.168.99.114',
+        host: '192.168.99.115',
         user: 'root',
         password: 'root',
         database: 'matcha'
@@ -10,4 +10,4 @@ try {
     module.exports = dbController
 } catch (error) {
     console.log(err)
-} 
+}
