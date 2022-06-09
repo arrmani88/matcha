@@ -16,8 +16,7 @@ Content-Type: application/json
 # username: between 2 & 35 characters, and can be alphanumeric
 # password: minimum 8 characters, at least one letter
 # -------------------------------------------------------------------------
-
-### ---------------------------- LOGIN ----------------------------
+### ----------------------------- LOGIN -----------------------------------
 POST {{hostname}}/login
 Content-Type: application/json
 
@@ -27,7 +26,7 @@ Content-Type: application/json
 }
 
 # -------------------------------------------------------------------------
-### ---------------------------- COMPLETE PROFILE ----------------------------
+### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json
 Authorization: {{token}}
@@ -43,8 +42,7 @@ Authorization: {{token}}
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
 # -------------------------------------------------------------------------
-
-### ---------------------------- UPLOAD PROFILE IMAGE ----------------------------
+### ----------------------- UPLOAD PROFILE IMAGE --------------------------
 POST {{hostname}}/upload_profile_image
 Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
@@ -56,8 +54,7 @@ Content-Disposition: form-data; name="image"; filename="158436118_19083791193183
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1000000 bytes (1MB)
 # -------------------------------------------------------------------------
-
-### ---------------------------- UPLOAD FEED IMAGES ----------------------------
+### ------------------------- UPLOAD FEED IMAGES --------------------------
 POST {{hostname}}/upload_feed_images
 Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
@@ -77,7 +74,7 @@ Content-Type: image/jpeg
 # value-> between 1 and 4 images
 # each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
 # -------------------------------------------------------------------------
-### ----------------------- SEND RESET PASSWORD EMAIL ----------------------
+### ----------------------- SEND RESET PASSWORD EMAIL ---------------------
 GET {{hostname}}/reset_password
 Content-Type: application/json
 
@@ -86,11 +83,23 @@ Content-Type: application/json
 }
 
 # -------------------------------------------------------------------------
-### -------------------------- RESET PASSWORD -------------------------
+### ---------------------------- RESET PASSWORD ---------------------------
 POST {{hostname}}/reset_password/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlhdCI6MTY1NDY4MzM4NH0.ScWgLpm9sEQxv3cESVgjAoVRlWMH_AJri3FuLmL3HuE
 Content-Type: application/json
 
 {
+    "password": "123123qwe"
+}
+
+# --------------------------------------------------------------------------
+### ------------------------ UPDATE PROFILE DATA ---------------------------
+POST {{hostname}}/update_profile
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "newFirstname": "aaaaaa",
+    "username": "arrmani88",
     "password": "123123qwe"
 }
 

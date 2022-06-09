@@ -80,7 +80,7 @@ router.post('/', async (req, res) => {
 							process.env.EMAIL_CONFIRMATION_RANDOM_STRING
 						)
 						console.log(`emailToken= \t${emailConfirmationToken}`)
-						let sentEmail = await transporter.sendMail(
+						let sentEmail = transporter.sendMail(
 							{
 								from: process.env.EMAIL_ADDR,
 								to: 'pirotil826@falkyz.com',
