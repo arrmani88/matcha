@@ -35,7 +35,8 @@ Authorization: {{token}}
     "birthday": "1997-10-25",
     "gender": "M",
     "sexualPreferences": "F",
-    "biography": "some description ...."
+    "biography": "some description ....",
+    "tags": ["swimming", "taggg", "football"]
 }
 
 # 'birthday': should be like YYYY-MM-DD

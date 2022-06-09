@@ -25,8 +25,27 @@ const validateProfileCompletionInput = (req, res, next) => {
 }
 
 router.post('/', validateToken, validateProfileCompletionInput, async (req, res) => {
-	const { birthday, gender, sexualPreferences, biography } = req.body
+	const { birthday, gender, sexualPreferences, biography, tags } = req.body
 	try {
+		console.log(tags)
+		let str = "SELECT * FROM tags WHERE value in ("
+		let count = 1;
+		for (const tag of tags) {
+			count != tags.length ? str += ("'" + tag + "', ") : str += ("'" + tag + "'" + ')')
+			count++
+		}
+		console.log(str)
+		dbController.query(
+			str,
+			(err, result) => {
+				console.log('---------------------')
+				if (err) console.log({ error: err })
+				console.log(result[0])
+				console.log(result[1])
+				console.log(result[2])
+				console.log('=====================')
+			}
+		)
 		dbController.query(
 			"UPDATE users SET " +
 				"birthday = ?, " +
