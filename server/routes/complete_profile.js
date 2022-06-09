@@ -3,22 +3,20 @@ const router = express.Router()
 const dbController = require('../models/db_controller')
 const validateToken = require('../middlewares/validate_token')
 const { isBirthday, isGender } = require('../functions/input_validation')
-const fieldIsNullMessage = "One of the fields 'birthday', 'gender', 'sexualPreferences', 'biography' is empty or wasn't sent"
+const fieldIsNullMessage = "One of the fields 'birthday', 'gender', 'sexualPreferences', 'biography' or 'tags' is empty or wasn't sent"
 
 const validateProfileCompletionInput = (req, res, next) => {
-    const { birthday, gender, sexualPreferences, biography } = req.body
-    if (!birthday || !gender || !sexualPreferences || !biography) {
-        res.status(422)
-        return res.json({error: {'details': fieldIsNullMessage}})
+    const { birthday, gender, sexualPreferences, biography, tags } = req.body
+    if (!birthday || !gender || !sexualPreferences || !biography || !tags) {
+        return res.status(422).json({error: {'details': fieldIsNullMessage}})
     } else if (!isBirthday(birthday)){
-        res.status(422)
-		return res.json({error: {"details": "Invalid 'birthday' syntax, should be like YYYY-MM-DD"}})
+		return res.status(422).json({error: {"details": "Invalid 'birthday' syntax, should be like YYYY-MM-DD"}})
     } else if (!isGender(gender)){
-        res.status(422)
-		return res.json({error: {"details": "Invalid 'gender' syntax, should be either 'M', 'F' or 'N' (if not specified)"}})
+		return res.status(422).json({error: {"details": "Invalid 'gender' syntax, should be either 'M', 'F' or 'N' (if not specified)"}})
     } else if (!isGender(sexualPreferences)){
-        res.status(422)
-		return res.json({error: {"details": "Invalid 'sexualPreferences' syntax, should be either 'M', 'F' or 'N' (if not specified)"}})
+		return res.status(422).json({error: {"details": "Invalid 'sexualPreferences' syntax, should be either 'M', 'F' or 'N' (if not specified)"}})
+    } else if (tags.length != 5){
+		return res.status(422).json({error: {"details": "Invalid 'tags' field, should contain 5 tags"}})
     } else {
         next()
     }
@@ -27,38 +25,56 @@ const validateProfileCompletionInput = (req, res, next) => {
 router.post('/', validateToken, validateProfileCompletionInput, async (req, res) => {
 	const { birthday, gender, sexualPreferences, biography, tags } = req.body
 	try {
-		console.log(tags)
-		let str = "SELECT * FROM tags WHERE value in ("
+		let existingTagsArray = []
+		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
+		
+		let insertNewTagsQuery = "INSERT INTO tags(value) VALUES("
 		let count = 1;
 		for (const tag of tags) {
-			count != tags.length ? str += ("'" + tag + "', ") : str += ("'" + tag + "'" + ')')
+			count != tags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 			count++
 		}
-		console.log(str)
 		dbController.query(
-			str,
+			getExistingTagsQuery,
 			(err, result) => {
-				console.log('---------------------')
-				if (err) console.log({ error: err })
-				console.log(result[0])
-				console.log(result[1])
-				console.log(result[2])
-				console.log('=====================')
+				if (err) return res.json({error: err}) 
+				else {
+					existingTagsArray = result
+					count = 1
+					let tagExists = false
+					for (let tag of tags) {
+						for (let existingTag of existingTagsArray) {
+							if (existingTag.value == tag) tagExists = true
+						}
+						if (!tagExists) {
+							count != existingTagsArray.length ? insertNewTagsQuery += ("'" + tag + "', ") : insertNewTagsQuery += ("'" + tag + "')")
+							count++
+						}
+						tagExists = false
+					}
+					console.log(insertNewTagsQuery)
+					dbController.query(
+						"UPDATE users SET " +
+							"birthday = ?, " +
+							"gender = ?, " +
+							"sexualPreferences = ?, " +
+							"biography = ? " +
+						"WHERE id = ?",
+						[birthday, gender, sexualPreferences, biography, req.user.id],
+						(err) => {
+							if (err) return res.json({error: err})
+							else return res.status(200).send('Profile completed successfully')
+						}
+					)
+				}
 			}
 		)
-		dbController.query(
-			"UPDATE users SET " +
-				"birthday = ?, " +
-				"gender = ?, " +
-				"sexualPreferences = ?, " +
-				"biography = ? " +
-			"WHERE id = ?",
-			[birthday, gender, sexualPreferences, biography, req.user.id],
-			(err) => { if (err) return res.json({error: err}) }
-		)
-		return res.status(200).send('Profile completed successfully')
+
+
+		
 	} catch (err) {
-		return res.json({error: err})
+		console.log(err)
+		return res.json({ error: err })
 	}
 })
 

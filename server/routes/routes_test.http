@@ -36,7 +36,7 @@ Authorization: {{token}}
     "gender": "M",
     "sexualPreferences": "F",
     "biography": "some description ....",
-    "tags": ["swimming", "taggg", "football"]
+    "tags": ["blogging", "traveling", "football", "astrology", "animes"]
 }
 
 # 'birthday': should be like YYYY-MM-DD
