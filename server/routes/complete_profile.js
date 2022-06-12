@@ -26,70 +26,78 @@ const validateProfileCompletionInput = (req, res, next) => {
 router.post('/', validateToken, validateProfileCompletionInput, async (req, res) => {
 	const { birthday, gender, sexualPreferences, biography, tags } = req.body
 	try {
-		let existingTagsArray = []
-		let newTagsIds = []
+		let usersTagsQuery
+		let tagsIds = []
 		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
-		let insertNewTagsQuery = "INSERT INTO tags(value) VALUES"
+		let newTagsQuery = "INSERT INTO tags(value) VALUES"
 		let count = 1;
 		for (const tag of tags) {
 			count != tags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 			count++
 		}
-		await new Promise(() => {
+		await new Promise((res, rej) => {
 			dbController.query(
 				getExistingTagsQuery,
 				(err, result) => {
-					if (err) return res.json({ error: err.message }) 
-					else if ((tags.length - result.length) > 0) { // if there are some tags to add to the DB
-						console.log('444')
-						existingTagsArray = result
-						const newTagsLength = tags.length - existingTagsArray.length
-						let tagExists = false
-						let firstAddedTagId
-						count = 1
-						for (let tag of tags) {
-							for (let existingTag of existingTagsArray) if (existingTag.value == tag) tagExists = true
-							if (!tagExists) {
-								count != newTagsLength ? insertNewTagsQuery += ("('" + tag + "'), ") : insertNewTagsQuery += ("('" + tag + "')")
-								count++
-							}
-							tagExists = false
-						}
-						dbController.query(
-							insertNewTagsQuery,
-							(err, result) => {
-								console.log('333')
-								if (err) res.status(400).json({ error: err })
-								else {
-									firstAddedTagId = result.insertId
-									count = 0
-									while (count < newTagsLength) {
-										newTagsIds.push(firstAddedTagId + count)
-										count++
-									}
-									// console.log(newTagsIds)
-									return (console.log('1111111'))
+					if (err) return rej(err)
+					else {
+						for (let existingTag of result) tagsIds.push(existingTag.id)
+						if ((tags.length - result.length) > 0) { // if there are some new tags to add to the DB
+							const newTagsLength = tags.length - result.length
+							let tagExists = false
+							let firstAddedTagId
+							count = 1
+							for (let tag of tags) { // setting newTagsQuery and tagsIds
+								for (let existingTag of result) if (existingTag.value == tag) tagExists = true
+								if (!tagExists) {
+									count != newTagsLength ? newTagsQuery += ("('" + tag + "'), ") : newTagsQuery += ("('" + tag + "')")
+									count++
 								}
+								tagExists = false
 							}
-						)
+							dbController.query(
+								newTagsQuery,
+								(err, result) => {
+									console.log(newTagsQuery)
+									if (err) rej(err)
+									else {
+										firstAddedTagId = result.insertId
+										count = 0
+										while (count < newTagsLength) {
+											tagsIds.push(firstAddedTagId + count)
+											count++
+										}
+										
+									}
+								}
+							)
+						}
 					}
 				}
 			)
+			res('123')
 		})
-		console.log('2222')
-		// dbController.query(
-		// 	"UPDATE users SET " +
-		// 		"birthday = ?, " +
-		// 		"gender = ?, " +
-		// 		"sexualPreferences = ?, " +
-		// 		"biography = ? " +
-		// 		"WHERE id = ?",
-		// 	[birthday, gender, sexualPreferences, biography, req.user.id],
-		// 	(err) => {
-		// 		if (err) return res.json({error: err})
-		// 		else return res.status(200).send('Profile completed successfully')
-		// 	}
-		// )
+		await new Promise((res, rej) => {
+			dbController.query(
+				"INSERT INTO usersTags(uid, tagId) VALUES",
+				(err, result) => {
+					
+				}
+			)
+		})
+		dbController.query(
+			"UPDATE users SET " +
+				"birthday = ?, " +
+				"gender = ?, " +
+				"sexualPreferences = ?, " +
+				"biography = ? " +
+				"WHERE id = ?",
+			[birthday, gender, sexualPreferences, biography, req.user.id],
+			(err) => {
+				if (err) return res.json({error: err})
+				else return res.status(200).send('Profile completed successfully')
+			}
+		)
 	} catch (err) {
 		console.log(err)
 		return res.json({ error: err })
