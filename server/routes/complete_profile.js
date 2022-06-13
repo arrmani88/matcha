@@ -43,7 +43,6 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 					else {
 						for (let existingTag of result) allTagsIds.push(existingTag.id)
 						if ((tags.length - result.length) > 0) { // if there are some new tags to add to the DB
-							console.log('><><><')
 							const newTagsLength = tags.length - result.length
 							let tagExists = false
 							let firstAddedTagId
