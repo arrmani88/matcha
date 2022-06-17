@@ -32,11 +32,11 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "birthday": "1997-10-25",
+    "birthday": "1994-12-24",
     "gender": "M",
     "sexualPreferences": "F",
     "biography": "some description ....",
-    "tags": ["sddddhhs", "sdgsddaaarfgs", "sffrsaadtdgegds", "sdsserfddwaawdfsss", "swefwerdssaa"]
+    "tags": ["sddededdhhs", "sdgsddaaarfgs", "sffrsaadtdgegds", "sdsserfddwaawdfsss", "swefwerdssaa"]
 }
 
 # 'birthday': should be like YYYY-MM-DD
@@ -101,7 +101,7 @@ Content-Type: application/json
 {
     "newFirstname": "aaaaaa",
     "username": "arrmani88",
-    "password": "123123qwe"
+    "password": "qweqwe123"
 }
 
 # -------------------------------------------------------------------------

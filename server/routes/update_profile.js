@@ -4,27 +4,39 @@ const dbController = require('../models/db_controller')
 const validateToken = require('../middlewares/validate_token.js')
 const isAccountComplete = require('../middlewares/is_account_complete.js')
 const confirmIdentityWithPassword = require('../middlewares/confirm_identity_with_password.js')
+const util = require('util')
 
 const getArrayOfUpdatedFields = (body, id) => {
 	const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = body
-	result = []
-	newFirstname != null ? result.push(newFirstname) : 0
-	newLastname != null ? result.push(newLastname) : 0
-	newUsername != null ? result.push(newUsername) : 0
-	newEmail != null ? result.push(newEmail) : 0
-	newPassword != null ? result.push(newPassword) : 0
-	newBirthday != null ? result.push(newBirthday) : 0
-	newGender != null ? result.push(newGender) : 0
-	newSexualPreferences != null ? result.push(newSexualPreferences) : 0
-	newBiography != null ? result.push(newBiography) : 0
-	result.push(id)
-	return result
+	let rtrn = []
+	newFirstname != null ? rtrn.push(newFirstname) : 0
+	newLastname != null ? rtrn.push(newLastname) : 0
+	newUsername != null ? rtrn.push(newUsername) : 0
+	newEmail != null ? rtrn.push(newEmail) : 0
+	newPassword != null ? rtrn.push(newPassword) : 0
+	newBirthday != null ? rtrn.push(newBirthday) : 0
+	newGender != null ? rtrn.push(newGender) : 0
+	newSexualPreferences != null ? rtrn.push(newSexualPreferences) : 0
+	newBiography != null ? rtrn.push(newBiography) : 0
+	rtrn.push(id)
+	return rtrn
 }
 
-router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, (req, res) => {
+const getArrayOfUpdatedTags = (body, id) => {
+	const { oldTags, newTags } = body
+	let rtrn = []
+	for (let i = 0; i < oldTags.length; i++) 
+	{
+		rtrn.push(newTags[i], id, oldTags[i])
+	}
+	return rtrn
+}
+
+router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
 	try {
+		const queryPromise = util.promisify(dbController.query.bind(dbController))
 		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = req.body
-		dbController.query(
+		var result = await queryPromise(
 			"UPDATE users SET " +
 				(newFirstname != null ? "firstname = ? " : "") + 
 				(newLastname != null ? "lastname = ? " : "") + 
@@ -37,15 +49,15 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 				(newBiography != null ? "biography = ? " : "") + 
 				"WHERE id = ?",
 			getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
-			(err) => { 
-				if (err) res.json({ error: err })
-				else {
-					res.send("Changes saved successfully")
-				}
-			}
 		)
+		// result = await queryPromise(
+		// 	"UPDATE usersTags SET " + 
+		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
+		// )
+		console.log(getArrayOfUpdatedTags([1, 2, 3], 1, [7,8,9]))
+		res.send("Changes saved successfully")
 	} catch (err) {
-		res.json({ error: err.message })
+		res.status(400).json({ error: err.message })
 	}
 })
 

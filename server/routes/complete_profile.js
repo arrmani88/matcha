@@ -5,6 +5,7 @@ const validateToken = require('../middlewares/validate_token')
 const { isBirthday, isGender } = require('../functions/input_validation')
 const { compareSync } = require('bcrypt')
 const fieldIsNullMessage = "One of the fields 'birthday', 'gender', 'sexualPreferences', 'biography' or 'tags' is empty or wasn't sent"
+const util = require('util')
 
 const validateProfileCompletionInput = (req, res, next) => {
 	const { birthday, gender, sexualPreferences, biography, tags } = req.body
@@ -26,6 +27,7 @@ const validateProfileCompletionInput = (req, res, next) => {
 router.post('/', validateToken, validateProfileCompletionInput, async (req, res) => {
 	const { birthday, gender, sexualPreferences, biography, tags } = req.body
 	try {
+		var queryPromise = util.promisify(dbController.query.bind(dbController))
 		let usersTagsQuery
 		let allTagsIds = []
 		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
@@ -35,87 +37,75 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 			count != tags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 			count++
 		}
-		await new Promise((res, rej) => {
-			dbController.query(
-				getExistingTagsQuery,
-				(err, result) => {
-					if (err) return rej(err)
-					else {
-						for (let existingTag of result) allTagsIds.push(existingTag.id)
-						if ((tags.length - result.length) > 0) { // if there are some new tags to add to the DB
-							const newTagsLength = tags.length - result.length
-							let tagExists = false
-							let firstAddedTagId
-							count = 1
-							for (let tag of tags) { // setting newTagsQuery and tagsIds
-								for (let existingTag of result) if (existingTag.value == tag) tagExists = true
-								if (!tagExists) {
-									count != newTagsLength ? newTagsQuery += ("('" + tag + "'), ") : newTagsQuery += ("('" + tag + "')")
-									count++
-								}
-								tagExists = false
-							}
-							dbController.query(
-								newTagsQuery,
-								(err, result) => {
-									if (err) rej(err)
-									else {
-										firstAddedTagId = result.insertId
-										count = 0
-										while (count < newTagsLength) {
-											allTagsIds.push(firstAddedTagId + count)
-											count++
-										}
-									}
-								}
-							)
-						}
-						console.log('1>>' + allTagsIds + '<<')
-					}
+		var result = await queryPromise(getExistingTagsQuery)
+		for (let existingTag of result) allTagsIds.push(existingTag.id)
+		if ((tags.length - result.length) > 0) { // if there are some new tags to add to the DB
+			const newTagsLength = tags.length - result.length
+			let tagExists = false
+			let firstAddedTagId
+			count = 1
+			for (let tag of tags) { // setting newTagsQuery and tagsIds
+				for (let existingTag of result) if (existingTag.value == tag) tagExists = true
+				if (!tagExists) {
+					count != newTagsLength ? newTagsQuery += ("('" + tag + "'), ") : newTagsQuery += ("('" + tag + "')")
+					count++
 				}
-			)
-			res('')
-		})
-		console.log('2>>' + allTagsIds + '<<')
-		
-
-		// await new Promise((res, rej) => {
-		// 	usersTagsQuery = "INSERT INTO usersTags(uid, tagId) VALUES"
-		// 	count = 1
-		// 	for (let tag of allTagsIds) {
-		// 		usersTagsQuery += (count < 5 ? "('" + tag + "')," : "('" + tag + "')")
-		// 		count++
-		// 	}
-		// 	console.log(usersTagsQuery)
-		// 	res('')
-			// dbController.query(
-			// 	"INSERT INTO usersTags(uid, tagId) VALUES",
-			// 	(err, result) => {
-
-			// 	}
-			// )
-		// })
-
-
-		// dbController.query(
-		// 	"UPDATE users SET " +
-		// 		"birthday = ?, " +
-		// 		"gender = ?, " +
-		// 		"sexualPreferences = ?, " +
-		// 		"biography = ? " +
-		// 		"WHERE id = ?",
-		// 	[birthday, gender, sexualPreferences, biography, req.user.id],
-		// 	(err) => {
-		// 		if (err) return res.json({error: err})
-		// 		else return res.status(200).send('Profile completed successfully')
-		// 	}
-		// )
-
-		res.send('finished')
+				tagExists = false
+			}
+			result = await queryPromise(newTagsQuery)
+			firstAddedTagId = result.insertId
+			count = 0
+			while (count < newTagsLength) {
+				allTagsIds.push(firstAddedTagId + count)
+				count++
+			}
+		}
+		usersTagsQuery = "INSERT INTO usersTags(uid, tagId) VALUES"
+		count = 1
+		for (let tag of allTagsIds) {
+			usersTagsQuery += (count < 5 ? "(" + req.user.id + ", " + tag + ")," : "(" + req.user.id + ", " + tag + ")")
+			count++
+		}
+		result = await queryPromise(usersTagsQuery)
+		result = await queryPromise(
+			"UPDATE users SET birthday = ?, gender = ?, sexualPreferences = ?, biography = ? WHERE id = ?",
+			[birthday, gender, sexualPreferences, biography, req.user.id]
+		)
+		return res.send('Profile completed successfully')
 	} catch (err) {
-		console.log(err)
-		return res.json({ error: err })
+		res.status(400).json({ error: err })
 	}
 })
+
+
+
+router.post('/', async (req, res) => {
+	var queryPromise = util.promisify(dbController.query.bind(dbController));
+	try {
+	var result = await queryPromise(
+		"SELECT * FROM users WHERE username = 'myUserName'",
+		(err, result) => {
+			if (err) console.log(err)
+			else console.log(result)
+			return (result)
+		}
+	)
+	console.log('<---- 1 ---->')
+	console.log('<---- 2 ---->')
+	result = await queryPromise(
+		"SELECT * FROM users WHERE username = 'myUserName'",
+		(err, result) => {
+			if (err) console.log(err)
+			else console.log(result)
+		}
+	)
+	console.log('<---- 3 ---->')
+	res.send('ok')
+	} catch(err) {
+		console.log('---------------------------')
+	  res.status(400).send(err);
+	}
+})
+
 
 module.exports = router
