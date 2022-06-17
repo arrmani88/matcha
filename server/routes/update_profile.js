@@ -36,9 +36,13 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 	try {
 		const queryPromise = util.promisify(dbController.query.bind(dbController))
 		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
-		const oldTagsIDs = []
+		var oldTagsIDs = []
+		var newTagsIDs = [] 
+		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
 		let j
+		/* ************** GETTING OLD TAGS IDs **************** */
 		if (newTags != null && oldTags != null) {
+
 			var result = await queryPromise( // get old tags IDs
 				"SELECT * FROM tags WHERE " +
 					(oldTags.length >= 1 ?    "value = ?" : "") +
@@ -58,6 +62,21 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 			}
 		}
 		console.log(oldTagsIDs)
+		/****************************************************** */
+		/**************** GETTING NEW TAGS IDs **************** */
+		for (const tag of oldTags) { // setting getExistingTagsQuery to send the query
+			count != oldTags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
+			count++
+		}
+		result = await queryPromise(getExistingTagsQuery)
+		
+		/****************************************************** */
+
+
+		// result = await queryPromise(
+		// 	"UPDATE usersTags SET " + 
+		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
+		// )
 		result = await queryPromise(
 			"UPDATE users SET " +
 				(newFirstname != null ? "firstname = ? " : "") +
@@ -72,11 +91,6 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 				"WHERE id = ?",
 			getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
 		)
-
-		// result = await queryPromise(
-		// 	"UPDATE usersTags SET " + 
-		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
-		// )
 
 		res.send("Changes saved successfully")
 	} catch (err) {

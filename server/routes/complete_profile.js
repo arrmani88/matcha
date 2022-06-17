@@ -31,9 +31,9 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 		let usersTagsQuery
 		let allTagsIds = []
 		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
-		let newTagsQuery = "INSERT INTO tags(value) VALUES"
+		let insertNewTagsQuery = "INSERT INTO tags(value) VALUES"
 		let count = 1;
-		for (const tag of tags) {
+		for (const tag of tags) { // setting getExistingTagsQuery to send the query
 			count != tags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 			count++
 		}
@@ -47,12 +47,12 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 			for (let tag of tags) { // setting newTagsQuery and tagsIds
 				for (let existingTag of result) if (existingTag.value == tag) tagExists = true
 				if (!tagExists) {
-					count != newTagsLength ? newTagsQuery += ("('" + tag + "'), ") : newTagsQuery += ("('" + tag + "')")
+					count != newTagsLength ? insertNewTagsQuery += ("('" + tag + "'), ") : insertNewTagsQuery += ("('" + tag + "')")
 					count++
 				}
 				tagExists = false
 			}
-			result = await queryPromise(newTagsQuery)
+			result = await queryPromise(insertNewTagsQuery)
 			firstAddedTagId = result.insertId
 			count = 0
 			while (count < newTagsLength) {
