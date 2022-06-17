@@ -68,42 +68,12 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 		}
 		result = await queryPromise(usersTagsQuery)
 		result = await queryPromise(
-			"UPDATE users SET birthday = ?, gender = ?, sexualPreferences = ?, biography = ? WHERE id = ?",
+			"UPDATE users SET birthday = ?, gender = ?, sexualPreferences = ?, biography = ?, areTagsAdded = 1 WHERE id = ?",
 			[birthday, gender, sexualPreferences, biography, req.user.id]
 		)
 		return res.send('Profile completed successfully')
 	} catch (err) {
 		res.status(400).json({ error: err })
-	}
-})
-
-
-
-router.post('/', async (req, res) => {
-	var queryPromise = util.promisify(dbController.query.bind(dbController));
-	try {
-	var result = await queryPromise(
-		"SELECT * FROM users WHERE username = 'myUserName'",
-		(err, result) => {
-			if (err) console.log(err)
-			else console.log(result)
-			return (result)
-		}
-	)
-	console.log('<---- 1 ---->')
-	console.log('<---- 2 ---->')
-	result = await queryPromise(
-		"SELECT * FROM users WHERE username = 'myUserName'",
-		(err, result) => {
-			if (err) console.log(err)
-			else console.log(result)
-		}
-	)
-	console.log('<---- 3 ---->')
-	res.send('ok')
-	} catch(err) {
-		console.log('---------------------------')
-	  res.status(400).send(err);
 	}
 })
 

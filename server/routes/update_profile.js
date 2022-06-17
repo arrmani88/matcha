@@ -36,6 +36,11 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 	try {
 		const queryPromise = util.promisify(dbController.query.bind(dbController))
 		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = req.body
+		var oldTags = await queryPromise(
+			"SELECT * FROM tags WHERE value = ? or value = ? or value = ? or value = ? or value = ?",
+			["sffrsaadtdgegds", "sdsserfddwaawdfsss", "sdgsddaaedarfgs", "sddddhhs"]
+		)
+		console.log(oldTags)
 		var result = await queryPromise(
 			"UPDATE users SET " +
 				(newFirstname != null ? "firstname = ? " : "") + 
@@ -50,13 +55,15 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 				"WHERE id = ?",
 			getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
 		)
+
 		// result = await queryPromise(
 		// 	"UPDATE usersTags SET " + 
 		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
 		// )
-		console.log(getArrayOfUpdatedTags([1, 2, 3], 1, [7,8,9]))
+
 		res.send("Changes saved successfully")
 	} catch (err) {
+		console.log(err)
 		res.status(400).json({ error: err.message })
 	}
 })

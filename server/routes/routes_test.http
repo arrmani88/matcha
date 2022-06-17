@@ -1,5 +1,5 @@
 @hostname = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTM1ODY5NTN9.YKb6Ta2jF5yHZRM9CCBuXZSenf5-5vAlOFiF1acVe8E
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTU0NzAyNjB9.jwbDc_qdpzlc14n7er7XU1VH8zuByKtBZ-nDNxWnCPo
 
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
@@ -35,7 +35,7 @@ Authorization: {{token}}
     "birthday": "1994-12-24",
     "gender": "M",
     "sexualPreferences": "F",
-    "biography": "some description ....",
+    "biography": "some dwescription ....",
     "tags": ["sddededdhhs", "sdgsddaaarfgs", "sffrsaadtdgegds", "sdsserfddwaawdfsss", "swefwerdssaa"]
 }
 
@@ -99,7 +99,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "newFirstname": "aaaaaa",
+    "newFirstname": "bb",
     "username": "arrmani88",
     "password": "qweqwe123"
 }
