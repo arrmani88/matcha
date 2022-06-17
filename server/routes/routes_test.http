@@ -36,7 +36,7 @@ Authorization: {{token}}
     "gender": "M",
     "sexualPreferences": "F",
     "biography": "some dwescription ....",
-    "tags": ["sddededdhhs", "sdgsddaaarfgs", "sffrsaadtdgegds", "sdsserfddwaawdfsss", "swefwerdssaa"]
+    "tags": ["aaaa", "bbbb", "ccc", "dddd", "eee"]
 }
 
 # 'birthday': should be like YYYY-MM-DD
@@ -101,7 +101,9 @@ Content-Type: application/json
 {
     "newFirstname": "bb",
     "username": "arrmani88",
-    "password": "qweqwe123"
+    "password": "qweqwe123",
+    "oldTags": ["eee", "oo", "ccc", "dddd", "aaaa"],
+    "newTags": ["111", "222", "333", "444"]
 }
 
 # -------------------------------------------------------------------------

@@ -35,23 +35,40 @@ const getArrayOfUpdatedTags = (body, id) => {
 router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
 	try {
 		const queryPromise = util.promisify(dbController.query.bind(dbController))
-		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = req.body
-		var oldTags = await queryPromise(
-			"SELECT * FROM tags WHERE value = ? or value = ? or value = ? or value = ? or value = ?",
-			["sffrsaadtdgegds", "sdsserfddwaawdfsss", "sdgsddaaedarfgs", "sddddhhs"]
-		)
-		console.log(oldTags)
-		var result = await queryPromise(
+		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
+		const oldTagsIDs = []
+		let j
+		if (newTags != null && oldTags != null) {
+			var result = await queryPromise( // get old tags IDs
+				"SELECT * FROM tags WHERE " +
+					(oldTags.length >= 1 ?    "value = ?" : "") +
+					(oldTags.length >= 2 ? "or value = ?" : "") +
+					(oldTags.length >= 3 ? "or value = ?" : "") +
+					(oldTags.length >= 4 ? "or value = ?" : "") +
+					(oldTags.length >= 5 ? "or value = ?" : ""),
+				oldTags
+			)
+		}
+		for (let i = 0 ; i < oldTags.length ; i++) {
+			j = 0
+			for (; j < result.length ; j++) {
+				if (result[j].value == oldTags[i]) {
+					oldTagsIDs.push(result[j].id)
+				}
+			}
+		}
+		console.log(oldTagsIDs)
+		result = await queryPromise(
 			"UPDATE users SET " +
-				(newFirstname != null ? "firstname = ? " : "") + 
-				(newLastname != null ? "lastname = ? " : "") + 
-				(newUsername != null ? "username = ? " : "") + 
-				(newEmail != null ? "email = ? " : "") + 
-				(newPassword != null ? "password = ? " : "") + 
-				(newBirthday != null ? "birthday = ? " : "") + 
-				(newGender != null ? "gender = ? " : "") + 
-				(newSexualPreferences != null ? "sexualPreferences = ? " : "") + 
-				(newBiography != null ? "biography = ? " : "") + 
+				(newFirstname != null ? "firstname = ? " : "") +
+				(newLastname != null ? "lastname = ? " : "") +
+				(newUsername != null ? "username = ? " : "") +
+				(newEmail != null ? "email = ? " : "") +
+				(newPassword != null ? "password = ? " : "") +
+				(newBirthday != null ? "birthday = ? " : "") +
+				(newGender != null ? "gender = ? " : "") +
+				(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
+				(newBiography != null ? "biography = ? " : "") +
 				"WHERE id = ?",
 			getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
 		)
