@@ -40,6 +40,7 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 		var newTagsIDs = [] 
 		let getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
 		let j
+		let count = 1
 		/* ************** GETTING OLD TAGS IDs **************** */
 		if (newTags != null && oldTags != null) {
 
@@ -53,6 +54,7 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 				oldTags
 			)
 		}
+		console.log('<-------------------->')
 		for (let i = 0 ; i < oldTags.length ; i++) {
 			j = 0
 			for (; j < result.length ; j++) {
@@ -68,8 +70,37 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 			count != oldTags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 			count++
 		}
+		console.log('get existing tags:' + getExistingTagsQuery)
 		result = await queryPromise(getExistingTagsQuery)
-		
+		console.log(result)
+		if ((newTags.length - result.length) > 0) { // if there are some new tags to add to the DB
+			const newTagsLength = newTags.length - result.length
+			let tagExists = false
+			let firstAddedTagId
+			count = 1
+			for (let tag of newTags) { // setting newTagsQuery and tagsIds
+				for (let existingTag of result) if (existingTag.value == tag) tagExists = true
+				if (!tagExists) {
+					count != newTagsLength ? insertNewTagsQuery += ("('" + tag + "'), ") : insertNewTagsQuery += ("('" + tag + "')")
+					count++
+				}
+				tagExists = false
+			}
+			console.log('insert these new tags:' + insertNewTagsQuery)
+			result = await queryPromise(insertNewTagsQuery)
+			firstAddedTagId = result.insertId
+			count = 0
+			while (count < newTagsLength) {
+				newTagsIDs.push(firstAddedTagId + count)
+				count++
+			}
+			console.log('new tags IDs:' + newTagsIDs)
+		}
+
+
+
+
+
 		/****************************************************** */
 
 
@@ -77,21 +108,21 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 		// 	"UPDATE usersTags SET " + 
 		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
 		// )
-		result = await queryPromise(
-			"UPDATE users SET " +
-				(newFirstname != null ? "firstname = ? " : "") +
-				(newLastname != null ? "lastname = ? " : "") +
-				(newUsername != null ? "username = ? " : "") +
-				(newEmail != null ? "email = ? " : "") +
-				(newPassword != null ? "password = ? " : "") +
-				(newBirthday != null ? "birthday = ? " : "") +
-				(newGender != null ? "gender = ? " : "") +
-				(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
-				(newBiography != null ? "biography = ? " : "") +
-				"WHERE id = ?",
-			getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
-		)
-
+	
+		// result = await queryPromise(
+		// 	"UPDATE users SET " +
+		// 		(newFirstname != null ? "firstname = ? " : "") +
+		// 		(newLastname != null ? "lastname = ? " : "") +
+		// 		(newUsername != null ? "username = ? " : "") +
+		// 		(newEmail != null ? "email = ? " : "") +
+		// 		(newPassword != null ? "password = ? " : "") +
+		// 		(newBirthday != null ? "birthday = ? " : "") +
+		// 		(newGender != null ? "gender = ? " : "") +
+		// 		(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
+		// 		(newBiography != null ? "biography = ? " : "") +
+		// 		"WHERE id = ?",
+		// 	getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
+		// )
 		res.send("Changes saved successfully")
 	} catch (err) {
 		console.log(err)
