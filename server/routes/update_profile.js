@@ -40,6 +40,7 @@ const getArrayOfUpdatedTags = (body, id) => {
 }
 
 const getOldTagsIDs = async (oldTags) => {
+	oldTagsIDs = []
 	var result = await queryPromise( // get old tags IDs
 		"SELECT * FROM tags WHERE " +
 			(oldTags.length >= 1 ?    "value = ?" : "") +
@@ -57,18 +58,21 @@ const getOldTagsIDs = async (oldTags) => {
 }
 
 const getNewTagsIDs = async (newTags) => {
+	getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
+	newTagsIDs = []
+	console.log('new tags length = ' + newTags.length)
+	count = 1
 	for (const tag of newTags) { // setting getExistingTagsQuery to send the query
 		count != newTags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
 		count++
 	}
-	console.log('get existing tags:' + getExistingTagsQuery)
 	existingTags = await queryPromise(getExistingTagsQuery)
-	console.log('existing tags: ' + existingTags)
 	if ((newTags.length - existingTags.length) > 0) { // if there are some new tags to add to the DB
 		const newTagsLength = newTags.length - existingTags.length
 		let tagExists = false
 		let firstAddedTagId
 		count = 1
+		insertNewTagsQuery = "INSERT INTO tags(value) VALUES"
 		for (let tag of newTags) { // setting newTagsQuery and tagsIds
 			for (let existingTag of existingTags) if (existingTag.value == tag) tagExists = true
 			if (!tagExists) {
@@ -77,7 +81,6 @@ const getNewTagsIDs = async (newTags) => {
 			}
 			tagExists = false
 		}
-		console.log('insert these new tags:' + insertNewTagsQuery)
 		result = await queryPromise(insertNewTagsQuery)
 		firstAddedTagId = result.insertId
 		count = 0
@@ -91,18 +94,23 @@ const getNewTagsIDs = async (newTags) => {
 	console.log('new tags ids' + newTagsIDs)
 }
 
+const updateUsersTags = async (oldTagsIDs, newTagsIDs, uid) => {
+	for (const index = 0 ; index < newTagsIDs ; index++) {
+		await queryPromise(
+			"UPDATE usersTags SET tagId = ? WHERE uid = ? AND tagId = ?",
+			[newTagsIDs[index], uid, oldTagsIDs[index]]
+		)
+	}
+}
+
 router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
 	try {
 		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
 		if (newTags != null && oldTags != null) {
 			await getOldTagsIDs(oldTags)
 			await getNewTagsIDs(newTags)
+			await updateUsersTags(oldTagsIDs, newTagsIDs, req.user.id)
 		}
-
-		// result = await queryPromise(
-		// 	"UPDATE usersTags SET " + 
-		// 		"tagId = 5 WHERE uid = 1 AND tagId = oldID"
-		// )
 
 		// result = await queryPromise(
 		// 	"UPDATE users SET " +
