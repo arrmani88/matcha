@@ -35,13 +35,11 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS `comments` (
+CREATE TABLE IF NOT EXISTS `blocks` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` int NOT NULL,
-  `content` varchar(65535) NOT NULL, 
-  `imageId` int NOT NULL,
+  `blockedID` int not NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 

@@ -14,6 +14,8 @@ const updateProfile = require('./routes/update_profile.js')
 const resetPassword = require('./routes/reset_password.js')
 const like = require('./routes/like')
 const unlike = require('./routes/unlike')
+const block = require('./routes/block')
+const unblock = require('./routes/unblock')
 
 app.use(express.json())
 app.use('/register', register)
@@ -26,6 +28,9 @@ app.use('/update_profile', updateProfile)
 app.use('/reset_password', resetPassword)
 app.use('/like', like)
 app.use('/unlike', unlike)
+app.use('/block', block)
+app.use('/unblock', unblock)
+
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 

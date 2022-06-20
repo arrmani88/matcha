@@ -79,7 +79,6 @@ router.post('/', async (req, res) => {
 							{ username, id: result[0].id },
 							process.env.EMAIL_CONFIRMATION_RANDOM_STRING
 						)
-						console.log(`emailToken= \t${emailConfirmationToken}`)
 						let sentEmail = transporter.sendMail(
 							{
 								from: process.env.EMAIL_ADDR,
