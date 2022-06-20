@@ -7,20 +7,20 @@ const util = require('util')
 const queryPromise = util.promisify(dbController.query.bind(dbController))
 
 router.post('/', validateToken, isAccountComplete, async (req, res) => {
-	const { likerID, likedID } = req.body
+	const { unlikerID, unlikedID } = req.body
 	try {
 		var result = await queryPromise(
 			"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
-			[likerID, likedID]
+			[unlikerID, unlikedID]
 		)
 		if (result.length == 0) {
 			await queryPromise(
-				"INSERT INTO likes(likerID, likedID) VALUES(?,?)",
-				[likerID, likedID],
+				"DELETE FROM likes WHERE likerID = ? AND likedID = ?",
+				[unlikerID, unlikedID],
 			)
 			await queryPromise(
-				"UPDATE users SET fameRating = fameRating + 1 WHERE id = ?",
-				[likedID]
+				"UPDATE users SET fameRating = fameRating - 1 WHERE id = ?",
+				[unlikedID]
 			)
 		}
 		res.send('done')

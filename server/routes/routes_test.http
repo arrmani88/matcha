@@ -16,16 +16,6 @@ Content-Type: application/json
 # username: between 2 & 35 characters, and can be alphanumeric
 # password: minimum 8 characters, at least one letter
 # -------------------------------------------------------------------------
-### ----------------------------- LOGIN -----------------------------------
-POST {{hostname}}/login
-Content-Type: application/json
-
-{
-    "login": "arrmani88",
-    "password": "qweqwe123"
-}
-
-# -------------------------------------------------------------------------
 ### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json
@@ -42,6 +32,16 @@ Authorization: {{token}}
 # 'birthday': should be like YYYY-MM-DD
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
+# -------------------------------------------------------------------------
+### ----------------------------- LOGIN -----------------------------------
+POST {{hostname}}/login
+Content-Type: application/json
+
+{
+    "login": "arrmani88",
+    "password": "qweqwe123"
+}
+
 # -------------------------------------------------------------------------
 ### ----------------------- UPLOAD PROFILE IMAGE --------------------------
 POST {{hostname}}/upload_profile_image
@@ -115,6 +115,17 @@ Content-Type: application/json
 {
     "likerID": 1,
     "likedID": 2
+}
+
+# -------------------------------------------------------------------------
+### -------------------------- UNLIKE PROFILE -----------------------------
+POST {{hostname}}/like
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "unlikerID": 1,
+    "unlikedID": 2
 }
 
 # -------------------------------------------------------------------------

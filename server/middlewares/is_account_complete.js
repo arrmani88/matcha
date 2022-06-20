@@ -2,11 +2,15 @@ const { handle } = require('express/lib/application')
 const dbController = require('../models/db_controller')
 
 const isAccountComplete = (req, res, next) => {
+	if ((req.body.likerID || req.body.unlikerID) != null) req.body.id = (req.body.likerID || req.body.unlikerID)
 	dbController.query(
-		"SELECT * FROM users WHERE username = ? OR id LIMIT 1",
-		[req.body.username, req.body.likerID],
+		"SELECT * FROM users WHERE username = ? OR id = ? LIMIT 1",
+		[req.body.username, req.body.id],
 		(err, result) => {
-			if (err) return res.json({ error: err })
+			if (result.length == 0) {
+				res.status(400).json({ Exception: "Inknown user id" })
+			}
+			else if (err) return res.json({ error: err })
 			else if (result[0].isAccountConfirmed == 0) {
 				return res.status(400).json({ exception: "unconfirmed email address", description: "Please check your email inbox to confirm your email account before performing this action" })
 			} else if (result[0].birthday == null || result[0].gender == null || result[0].sexualPreferences == null || result[0].biography == null || result[0].areTagsAdded == 0) {
