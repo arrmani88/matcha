@@ -103,7 +103,18 @@ Content-Type: application/json
     "username": "arrmani88",
     "password": "qweqwe123",
     "oldTags": ["ee", "bb", "cc", "dd", "aa"],
-    "newTags": ["11", "22", "aa", "44", "55"]
+    "newTags": ["11", "22", "33", "44", "55"]
+}
+
+# -------------------------------------------------------------------------
+### --------------------------  LIKE PROFILE  -----------------------------
+POST {{hostname}}/like
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "likerID": 1,
+    "likedID": 2
 }
 
 # -------------------------------------------------------------------------

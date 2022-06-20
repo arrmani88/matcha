@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `sexualPreferences` char(1) DEFAULT NULL,
   `biography` varchar(200) DEFAULT NULL,
   `areTagsAdded` varchar(1) DEFAULT 0,
+  `fameRating` int DEFAULT 0,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
@@ -28,10 +29,9 @@ CREATE TABLE IF NOT EXISTS `images` (
 
 CREATE TABLE IF NOT EXISTS `likes` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `uid` int NOT NULL,
-  `imageId` int not NULL,
+  `likerID` int NOT NULL,
+  `likedID` int not NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );
 

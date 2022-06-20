@@ -3,8 +3,8 @@ const dbController = require('../models/db_controller')
 
 const isAccountComplete = (req, res, next) => {
 	dbController.query(
-		"SELECT * FROM users WHERE username =? LIMIT 1",
-		[req.body.username],
+		"SELECT * FROM users WHERE username = ? OR id LIMIT 1",
+		[req.body.username, req.body.likerID],
 		(err, result) => {
 			if (err) return res.json({ error: err })
 			else if (result[0].isAccountConfirmed == 0) {

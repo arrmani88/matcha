@@ -14,7 +14,7 @@ const confirmIdentityWithPassword = (req, res, next) => {
 					else if (!isMatched) {
 						return res.status(403).send("Wrong password")
 					} else {
-						req.user = result
+						req.user = result[0]
 						next()
 					}
 				})

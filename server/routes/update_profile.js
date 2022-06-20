@@ -60,7 +60,6 @@ const getOldTagsIDs = async (oldTags) => {
 const getNewTagsIDs = async (newTags) => {
 	getExistingTagsQuery = "SELECT * FROM tags WHERE value in ("
 	newTagsIDs = []
-	console.log('new tags length = ' + newTags.length)
 	count = 1
 	for (const tag of newTags) { // setting getExistingTagsQuery to send the query
 		count != newTags.length ? getExistingTagsQuery += ("'" + tag + "', ") : getExistingTagsQuery += ("'" + tag + "')")
@@ -95,15 +94,17 @@ const getNewTagsIDs = async (newTags) => {
 }
 
 const updateUsersTags = async (oldTagsIDs, newTagsIDs, uid) => {
-	for (const index = 0 ; index < newTagsIDs ; index++) {
+	for (let index = 0 ; index < newTagsIDs.length ; index++) {
 		await queryPromise(
-			"UPDATE usersTags SET tagId = ? WHERE uid = ? AND tagId = ?",
+			"UPDATE usersTags SET tagId = ? WHERE uid = ? AND tagId = ? LIMIT 1",
 			[newTagsIDs[index], uid, oldTagsIDs[index]]
 		)
+		// console.log(`UPDATE usersTags SET tagId = ${newTagsIDs[index]} WHERE uid = ${uid} AND tagId = ${oldTagsIDs[index]}`)
+		// console.log(tmp)
 	}
 }
 
-router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
+router.post('/', confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
 	try {
 		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
 		if (newTags != null && oldTags != null) {
@@ -111,21 +112,20 @@ router.post('/', validateToken, confirmIdentityWithPassword, isAccountComplete, 
 			await getNewTagsIDs(newTags)
 			await updateUsersTags(oldTagsIDs, newTagsIDs, req.user.id)
 		}
-
-		// result = await queryPromise(
-		// 	"UPDATE users SET " +
-		// 		(newFirstname != null ? "firstname = ? " : "") +
-		// 		(newLastname != null ? "lastname = ? " : "") +
-		// 		(newUsername != null ? "username = ? " : "") +
-		// 		(newEmail != null ? "email = ? " : "") +
-		// 		(newPassword != null ? "password = ? " : "") +
-		// 		(newBirthday != null ? "birthday = ? " : "") +
-		// 		(newGender != null ? "gender = ? " : "") +
-		// 		(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
-		// 		(newBiography != null ? "biography = ? " : "") +
-		// 		"WHERE id = ?",
-		// 	getArrayOfUpdatedFields(req.body, (req.user[0].id).toString()),
-		// )
+		result = await queryPromise(
+			"UPDATE users SET " +
+				(newFirstname != null ? "firstname = ? " : "") +
+				(newLastname != null ? "lastname = ? " : "") +
+				(newUsername != null ? "username = ? " : "") +
+				(newEmail != null ? "email = ? " : "") +
+				(newPassword != null ? "password = ? " : "") +
+				(newBirthday != null ? "birthday = ? " : "") +
+				(newGender != null ? "gender = ? " : "") +
+				(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
+				(newBiography != null ? "biography = ? " : "") +
+				"WHERE id = ?",
+			getArrayOfUpdatedFields(req.body, (req.user.id).toString()),
+		)
 		res.send("Changes saved successfully")
 	} catch (err) {
 		console.log(err)

@@ -12,6 +12,7 @@ const uploadFeedImages = require('./routes/upload_feed_images')
 const confirmEmail = require('./routes/confirm_email')
 const updateProfile = require('./routes/update_profile.js')
 const resetPassword = require('./routes/reset_password.js')
+const like = require('./routes/like')
 
 app.use(express.json())
 app.use('/register', register)
@@ -22,6 +23,7 @@ app.use('/upload_feed_images', uploadFeedImages)
 app.use('/confirm_email', confirmEmail)
 app.use('/update_profile', updateProfile)
 app.use('/reset_password', resetPassword)
+app.use('/like', like)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
