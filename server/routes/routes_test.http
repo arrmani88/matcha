@@ -7,8 +7,8 @@ Content-Type: application/json
 {
     "firstname": "anas",
     "lastname": "el boudali",
-    "username": "arrmani88",
-    "email": "a@a.com",
+    "username": "3arrmani88",
+    "email": "3a@a.com",
     "password": "qweqwe123"
 }
 
@@ -52,9 +52,9 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="image"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+Content-Disposition: form-data; name="image"; filename="280757240_2246254508864127_8558230314910661985_n.jpg"
 
-< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+< /Users/anel-bou/Desktop/280757240_2246254508864127_8558230314910661985_n.jpg
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1024*1024 bytes (1MB)
 # -------------------------------------------------------------------------
@@ -64,10 +64,10 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135kkk232057492950_n.jpg"
 Content-Type: image/jpeg
 
-< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135kkk232057492950_n.jpg
 --boundary
 Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
 Content-Type: image/jpeg
@@ -139,7 +139,7 @@ Content-Type: application/json
 
 {
     "uid": 1,
-    "blockedID": 4
+    "blockedID": 2
 }
 
 # -------------------------------------------------------------------------

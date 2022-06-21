@@ -5,6 +5,8 @@ const multer = require('multer')
 const crypto = require('crypto')
 const validateToken = require('../middlewares/validate_token')
 const dbController = require('../models/db_controller')
+const util = require('util')
+const queryPromise = util.promisify(dbController.query.bind(dbController))
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -31,29 +33,25 @@ const multi_upload = multer({
 	}
 }).array('images', 4)
 
-router.post('/', validateToken, (req, res) => {
+router.post('/', validateToken, async (req, res) => {
 	let isErrorFound = 0
 	req.newFilesNames = []
-	multi_upload(req, res, (err) => {
-		if (err) {
-			isErrorFound = 1
-			res.status(400).json(err).end()
-		} else {
-			for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
-				dbController.query(
-					"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
-					[req.user.id, 0, req.newFilesNames[index]],
-					(err) => {
-						if (err) {
-							isErrorFound = 1
-							res.status(400).json({ error: err }).end()
-						}
-					}
-				)
+	try {
+		await multi_upload(req, res, async (err) => {
+			if (err) res.status(400).json(err)
+			else {
+				for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
+					await queryPromise(
+						"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
+						[req.user.id, 0, req.newFilesNames[index]],
+					)
+				}
+				res.send('Images sent successfully')
 			}
-			if (isErrorFound == 0) res.send('images sent successfully').end()
-		}
-	})
+		})
+	} catch (err) {
+		res.status(400).json({ error: err })
+	}
 })
 
 module.exports = router

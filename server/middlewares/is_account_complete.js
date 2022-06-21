@@ -7,8 +7,6 @@ const isAccountComplete = (req, res, next) => {
 		"SELECT * FROM users WHERE username = ? OR id = ? LIMIT 1",
 		[req.body.username, req.body.id],
 		(err, result) => {
-			console.log('id=' + req.body.id)
-			console.log(result)
 			if (!result || result.length == 0) res.status(400).json({ Exception: "Inknown user id" })
 			else if (err) return res.json({ error: err })
 			else if (result[0].isAccountConfirmed == 0) return res.status(400).json({ exception: "unconfirmed email address", description: "Please check your email inbox to confirm your email account before performing this action" })
