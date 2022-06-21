@@ -9,6 +9,7 @@ const queryPromise = util.promisify(dbController.query.bind(dbController))
 router.post('/', validateToken, isAccountComplete, async (req, res) => {
 	const { likerID, likedID } = req.body
 	try {
+		if (likerID == likedID) return res.status(400).send("Are you trying to like your own profile ?, sorry this isn't possible")
 		var result = await queryPromise( // to see if the user already liked the profile
 			"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
 			[likerID, likedID]
@@ -22,13 +23,17 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 				"UPDATE users SET fameRating = fameRating + 1 WHERE id = ?",
 				[likedID]
 			)
-			result = await queryPromise( // to see if both profiles like each other
+			result = await queryPromise( // to see if both profiles like each other to match them
 				"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
 				[likedID, likerID]
 			)
 			if (result.length == 0) {
 				res.send("Profile liked, persons not matched")
 			} else {
+				await queryPromise(
+					"INSERT INTO matchedUsers(uid1, uid2) VALUES(?,?)",
+					[likerID, likedID]
+				)
 				res.send("Profile liked, persons matched")
 			}
 		} else {

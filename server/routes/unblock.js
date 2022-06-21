@@ -8,7 +8,8 @@ const queryPromise = util.promisify(dbController.query.bind(dbController))
 
 router.post('/', validateToken, isAccountComplete, async (req, res) => {
 	const { uid, unblockedID } = req.body
-	var result = await queryPromise( // to see if the user already liked the profile
+	try {
+		var result = await queryPromise( // to see if the user already blocked the profile
 		"SELECT * FROM blocks WHERE id = ? AND blockedID = ?",
 		[uid, unblockedID]
 	)
@@ -20,6 +21,9 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 		res.send("Profile blocked successfully")
 	} else {
 		res.send("Profile already blocked")
+	}
+	} catch (err) {
+		res.status(400).json({ error: err })
 	}
 })
 

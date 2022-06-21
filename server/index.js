@@ -16,6 +16,7 @@ const like = require('./routes/like')
 const unlike = require('./routes/unlike')
 const block = require('./routes/block')
 const unblock = require('./routes/unblock')
+const getBlockedUsers = require('./routes/get_blocked_users')
 
 app.use(express.json())
 app.use('/register', register)
@@ -30,6 +31,7 @@ app.use('/like', like)
 app.use('/unlike', unlike)
 app.use('/block', block)
 app.use('/unblock', unblock)
+app.use('/get_blocked_users', getBlockedUsers)
 
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))

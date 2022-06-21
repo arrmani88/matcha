@@ -7,11 +7,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `isAccountConfirmed` varchar(1) DEFAULT 0,
   `password` varchar(200) NOT NULL,
   `birthday` varchar(10) DEFAULT NULL,
+  `city` varchar(60) DEFAULT NULL,
   `gender` varchar(1) DEFAULT NULL,
   `sexualPreferences` char(1) DEFAULT NULL,
   `biography` varchar(200) DEFAULT NULL,
-  `areTagsAdded` varchar(1) DEFAULT 0,
+  `longtitude` float DEFAULT NULL,
+  `latitude` float DEFAULT NULL,
   `fameRating` int DEFAULT 0,
+  `areTagsAdded` varchar(1) DEFAULT 0,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
@@ -53,5 +56,13 @@ CREATE TABLE IF NOT EXISTS `usersTags` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` int NOT NULL,
   `tagId` int NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS `matchedUsers` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `uid1` int NOT NULL,
+  `uid2` int not NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 );

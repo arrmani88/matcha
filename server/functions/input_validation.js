@@ -28,4 +28,9 @@ function isGender(gender) {
 	return (gender == 'M' || gender == 'F' || gender == 'N')
 }
 
-module.exports = { isName, isUsername, isEmail, isPassword, isBirthday, isGender }
+function isCity(city) {
+	const rgx = /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/
+	return rgx.test(String(city))
+}
+
+module.exports = { isName, isUsername, isEmail, isPassword, isBirthday, isGender, isCity }

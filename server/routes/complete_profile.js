@@ -2,18 +2,20 @@ const express = require('express')
 const router = express.Router()
 const dbController = require('../models/db_controller')
 const validateToken = require('../middlewares/validate_token')
-const { isBirthday, isGender } = require('../functions/input_validation')
+const { isBirthday, isGender, isCity } = require('../functions/input_validation')
 const { compareSync } = require('bcrypt')
-const fieldIsNullMessage = "One of the fields 'birthday', 'gender', 'sexualPreferences', 'biography' or 'tags' is empty or wasn't sent"
+const fieldIsNullMessage = "One of the fields 'birthday', 'city', 'gender', 'sexualPreferences', 'biography' or 'tags' is empty or wasn't sent"
 const util = require('util')
 var queryPromise = util.promisify(dbController.query.bind(dbController))
 
 const validateProfileCompletionInput = (req, res, next) => {
-	const { birthday, gender, sexualPreferences, biography, tags } = req.body
-	if (!birthday || !gender || !sexualPreferences || !biography || !tags) {
+	const { city, birthday, gender, sexualPreferences, biography, tags } = req.body
+	if (!city || !birthday || !gender || !sexualPreferences || !biography || !tags) {
 		return res.status(422).json({ error: { 'details': fieldIsNullMessage } })
 	} else if (!isBirthday(birthday)) {
 		return res.status(422).json({ error: { "details": "Invalid 'birthday' syntax, should be like YYYY-MM-DD" } })
+	} else if (!isCity(city)) {
+		return res.status(422).json({ error: { "details": "Invalid 'city' name" } })
 	} else if (!isGender(gender)) {
 		return res.status(422).json({ error: { "details": "Invalid 'gender' syntax, should be either 'M', 'F' or 'N' (if not specified)" } })
 	} else if (!isGender(sexualPreferences)) {
@@ -26,7 +28,7 @@ const validateProfileCompletionInput = (req, res, next) => {
 }
 
 router.post('/', validateToken, validateProfileCompletionInput, async (req, res) => {
-	const { birthday, gender, sexualPreferences, biography, tags } = req.body
+	const { birthday, city, gender, sexualPreferences, biography, tags } = req.body
 	try {
 		let setUsersTagsQuery
 		let allTagsIds = []
@@ -73,8 +75,8 @@ router.post('/', validateToken, validateProfileCompletionInput, async (req, res)
 			result = await queryPromise(setUsersTagsQuery)
 		}
 		result = await queryPromise(
-			"UPDATE users SET birthday = ?, gender = ?, sexualPreferences = ?, biography = ?, areTagsAdded = 1 WHERE id = ?",
-			[birthday, gender, sexualPreferences, biography, req.user.id]
+			"UPDATE users SET birthday = ?, city = ?, gender = ?, sexualPreferences = ?, biography = ?, areTagsAdded = 1 WHERE id = ?",
+			[birthday, city, gender, sexualPreferences, biography, req.user.id]
 		)
 		return res.send('Profile completed successfully')
 	} catch (err) {

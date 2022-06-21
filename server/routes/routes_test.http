@@ -25,9 +25,13 @@ Authorization: {{token}}
     "gender": "M",
     "sexualPreferences": "F",
     "biography": "some dwescription ....",
+    "city": "Casablanca",
+    "latitude": 15.8018625,
+    "longtitude": 16.4505496,
     "tags": ["aa", "bb", "cc", "dd", "ee"]
 }
 
+// RECENTLY ADDED: city
 # 'birthday': should be like YYYY-MM-DD
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
@@ -118,7 +122,7 @@ Content-Type: application/json
 
 # -------------------------------------------------------------------------
 ### -------------------------- UNLIKE PROFILE -----------------------------
-POST {{hostname}}/like
+POST {{hostname}}/unlike
 Authorization: {{token}}
 Content-Type: application/json
 
@@ -135,7 +139,7 @@ Content-Type: application/json
 
 {
     "uid": 1,
-    "blockedID": 2
+    "blockedID": 4
 }
 
 # -------------------------------------------------------------------------
@@ -147,6 +151,16 @@ Content-Type: application/json
 {
     "uid": 1,
     "unblockedID": 2
+}
+
+# -------------------------------------------------------------------------
+### ------------------------- GET BLOCKED USERS ---------------------------
+GET {{hostname}}/get_blocked_users
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "uid": 1
 }
 
 # -------------------------------------------------------------------------

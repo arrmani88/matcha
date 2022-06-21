@@ -14,7 +14,7 @@ let j
 let count = 1
 
 const getArrayOfUpdatedFields = (body, id) => {
-	const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography } = body
+	const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newCity, newGender, newSexualPreferences, newBiography } = body
 	let rtrn = []
 	newFirstname != null ? rtrn.push(newFirstname) : 0
 	newLastname != null ? rtrn.push(newLastname) : 0
@@ -22,6 +22,7 @@ const getArrayOfUpdatedFields = (body, id) => {
 	newEmail != null ? rtrn.push(newEmail) : 0
 	newPassword != null ? rtrn.push(newPassword) : 0
 	newBirthday != null ? rtrn.push(newBirthday) : 0
+	newCity != null ? rtrn.push(newCity) : 0
 	newGender != null ? rtrn.push(newGender) : 0
 	newSexualPreferences != null ? rtrn.push(newSexualPreferences) : 0
 	newBiography != null ? rtrn.push(newBiography) : 0
@@ -99,8 +100,6 @@ const updateUsersTags = async (oldTagsIDs, newTagsIDs, uid) => {
 			"UPDATE usersTags SET tagId = ? WHERE uid = ? AND tagId = ? LIMIT 1",
 			[newTagsIDs[index], uid, oldTagsIDs[index]]
 		)
-		// console.log(`UPDATE usersTags SET tagId = ${newTagsIDs[index]} WHERE uid = ${uid} AND tagId = ${oldTagsIDs[index]}`)
-		// console.log(tmp)
 	}
 }
 
@@ -120,6 +119,7 @@ router.post('/', confirmIdentityWithPassword, isAccountComplete, async (req, res
 				(newEmail != null ? "email = ? " : "") +
 				(newPassword != null ? "password = ? " : "") +
 				(newBirthday != null ? "birthday = ? " : "") +
+				(newCity != null ? "city = ? " : "") +
 				(newGender != null ? "gender = ? " : "") +
 				(newSexualPreferences != null ? "sexualPreferences = ? " : "") +
 				(newBiography != null ? "biography = ? " : "") +
