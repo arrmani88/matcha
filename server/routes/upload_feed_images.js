@@ -21,76 +21,39 @@ const storage = multer.diskStorage({
 	},
 })
 
-const multi_upload = multer({
-	storage,
-	limits: { fileSize: 1 * 1024 * 1024 }, //1MB
-	fileFilter: (req, file, cb) => {
-		if (file.mimetype != 'image/jpg' && file.mimetype != 'image/jpeg' && file.mimetype != 'image/png') {
-			return cb("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file")
-		} else {
-			cb(null, true)
+const multi_upload = util.promisify(
+	multer({
+		storage,
+		limits: { fileSize: 1 * 1024 * 1024 }, //1MB
+		fileFilter: (req, file, cb) => {
+			if (file.mimetype != 'image/jpg' && file.mimetype != 'image/jpeg' && file.mimetype != 'image/png')
+				return cb("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file")
+			else
+				cb(null, true)
 		}
-	}
-}).array('images', 4)
+	}).array('images', 4)
+)
 
 router.post('/', validateToken, async (req, res) => {
 	let isErrorFound = 0
 	req.newFilesNames = []
 	try {
-		await queryPromise(
+		var result = await queryPromise(
 			"SELECT * FROM images WHERE uid = ?",
 			req.user.id
 		)
-		multi_upload(req, res, async (err) => {
-			if (err) res.status(400).json(err)
-			else {
-				for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
-					await queryPromise(
-						"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
-						[req.user.id, 0, req.newFilesNames[index]],
-					)
-				}
-				res.send('Images sent successfully')
-			}
-		})
+		await multi_upload(req, res)
+		console.log(result)
+		for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
+			await queryPromise(
+				"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
+				[req.user.id, 0, req.newFilesNames[index]],
+			)
+		}
+		res.send('Images sent successfully')
 	} catch (err) {
 		res.status(400).json({ error: err })
 	}
 })
 
 module.exports = router
-
-
-
-router.post('/', validateToken, async (req, res) => {
-	try {
-		var result = await queryPromise( // check if a profile picture already exists, to remplace it
-			"SELECT * FROM images WHERE uid = ? AND isProfileImage = 1",
-			[req.user.id]
-		)
-		console.log('length=' + result.length)
-		upload(req, res, async (err) => {
-			console.log('UPLOADING .....')
-			if (err) return res.status(400).send({ error: err.message })
-			else {
-				if (result.length == 0) { // if no profile image was added add one
-					console.log(newImageName + '---')
-					await queryPromise(
-						"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
-						[req.user.id, 1, newImageName],
-					)
-				} else { // else if a profile image exists
-					console.log(newImageName + '-----')
-					await queryPromise(
-						"UPDATE images SET image = ? WHERE id = ?",
-						[newImageName, result[0].id]
-					)
-				}
-			}
-		})
-		res.send("Profile image upladed successfully")
-	} catch (err) {
-		console.log(err)
-	}
-})
-
