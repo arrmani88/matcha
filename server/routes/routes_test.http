@@ -7,8 +7,8 @@ Content-Type: application/json
 {
     "firstname": "anas",
     "lastname": "el boudali",
-    "username": "3arrmani88",
-    "email": "3a@a.com",
+    "username": "arrmani88",
+    "email": "a@a.com",
     "password": "qweqwe123"
 }
 
@@ -31,7 +31,7 @@ Authorization: {{token}}
     "tags": ["aa", "bb", "cc", "dd", "ee"]
 }
 
-// RECENTLY ADDED: city
+// RECENTLY ADDED: city, long/lati
 # 'birthday': should be like YYYY-MM-DD
 # 'gender': should be either 'M', 'F' or 'N' (if not specified)
 # 'sexualPreferences': should be either 'M', 'F' or 'N' (if not specified)
@@ -52,9 +52,9 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="image"; filename="280757240_2246254508864127_8558230314910661985_n.jpg"
+Content-Disposition: form-data; name="image"; filename="110041475_1705418449614405_1757044812498150729_n.jpg"
 
-< /Users/anel-bou/Desktop/280757240_2246254508864127_8558230314910661985_n.jpg
+< /Users/anel-bou/Desktop/110041475_1705418449614405_1757044812498150729_n.jpg
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1024*1024 bytes (1MB)
 # -------------------------------------------------------------------------
@@ -64,15 +64,15 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135kkk232057492950_n.jpg"
-Content-Type: image/jpeg
-
-< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135kkk232057492950_n.jpg
---boundary
 Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
 Content-Type: image/jpeg
 
 < /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+--boundary
+Content-Disposition: form-data; name="images"; filename="280757240_2246254508864127_8558230314910661985_n.jpg"
+Content-Type: image/jpeg
+
+< /Users/anel-bou/Desktop/280757240_2246254508864127_8558230314910661985_n.jpg
 --boundary--
 # key-> images
 # value-> between 1 and 4 images

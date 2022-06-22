@@ -37,7 +37,11 @@ router.post('/', validateToken, async (req, res) => {
 	let isErrorFound = 0
 	req.newFilesNames = []
 	try {
-		await multi_upload(req, res, async (err) => {
+		await queryPromise(
+			"SELECT * FROM images WHERE uid = ?",
+			req.user.id
+		)
+		multi_upload(req, res, async (err) => {
 			if (err) res.status(400).json(err)
 			else {
 				for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
@@ -55,3 +59,38 @@ router.post('/', validateToken, async (req, res) => {
 })
 
 module.exports = router
+
+
+
+router.post('/', validateToken, async (req, res) => {
+	try {
+		var result = await queryPromise( // check if a profile picture already exists, to remplace it
+			"SELECT * FROM images WHERE uid = ? AND isProfileImage = 1",
+			[req.user.id]
+		)
+		console.log('length=' + result.length)
+		upload(req, res, async (err) => {
+			console.log('UPLOADING .....')
+			if (err) return res.status(400).send({ error: err.message })
+			else {
+				if (result.length == 0) { // if no profile image was added add one
+					console.log(newImageName + '---')
+					await queryPromise(
+						"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
+						[req.user.id, 1, newImageName],
+					)
+				} else { // else if a profile image exists
+					console.log(newImageName + '-----')
+					await queryPromise(
+						"UPDATE images SET image = ? WHERE id = ?",
+						[newImageName, result[0].id]
+					)
+				}
+			}
+		})
+		res.send("Profile image upladed successfully")
+	} catch (err) {
+		console.log(err)
+	}
+})
+
