@@ -2,7 +2,7 @@ const mysql = require('mysql')
 
 try {
     const dbController = mysql.createConnection({
-        host: '192.168.99.122',
+        host: '192.168.99.130',
         user: 'root',
         password: 'root',
         database: 'matcha'

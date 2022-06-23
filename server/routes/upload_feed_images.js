@@ -42,8 +42,8 @@ router.post('/', validateToken, async (req, res) => {
 			"SELECT * FROM images WHERE uid = ?",
 			req.user.id
 		)
+		console.log(result.length)
 		await multi_upload(req, res)
-		console.log(result)
 		for (var index = 0; index < req.files.length && isErrorFound == 0; index++) {
 			await queryPromise(
 				"INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)",
@@ -52,6 +52,7 @@ router.post('/', validateToken, async (req, res) => {
 		}
 		res.send('Images sent successfully')
 	} catch (err) {
+		console.log(err)
 		res.status(400).json({ error: err })
 	}
 })
