@@ -58,7 +58,7 @@ Content-Disposition: form-data; name="image"; filename="110041475_17054184496144
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1024*1024 bytes (1MB)
 # -------------------------------------------------------------------------
-### ------------------------- UPLOAD FEED IMAGES --------------------------
+### --------------------- UPLOAD MULTIPLE FEED IMAGES ---------------------
 POST {{hostname}}/upload_feed_images
 Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
@@ -73,11 +73,32 @@ Content-Disposition: form-data; name="images"; filename="280757240_2246254508864
 Content-Type: image/jpeg
 
 < /Users/anel-bou/Desktop/280757240_2246254508864127_8558230314910661985_n.jpg
+--boundary
+Content-Disposition: form-data; name="images"; filename="241627112_2050365095119737_627556215734896866_n.jpg"
+Content-Type: image/jpeg
+
+< /Users/anel-bou/Desktop/241627112_2050365095119737_627556215734896866_n.jpg
 --boundary--
 # key-> images
 # value-> between 1 and 4 images
 # each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
 # -------------------------------------------------------------------------
+### ------------------------- UPLOAD 1 FEED IMAGE -------------------------
+POST {{hostname}}/upload_feed_images
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="images"; filename="158436118_1908379119318336_7678135232057492950_n.jpg"
+Content-Type: image/jpeg
+
+< /Users/anel-bou/Desktop/158436118_1908379119318336_7678135232057492950_n.jpg
+--boundary--
+# key-> images
+# value-> between 1 and 4 images
+# each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
+# -------------------------------------------------------------------------
+
 ### ----------------------- SEND RESET PASSWORD EMAIL ---------------------
 GET {{hostname}}/reset_password
 Content-Type: application/json
