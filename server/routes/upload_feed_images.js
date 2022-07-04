@@ -33,20 +33,23 @@ const multi_upload = util.promisify(
 	}).array('images', nbImagesCanUploadMore)
 )
 
-const parseFormDataPromise = util.promisify(
-	new multiparty.Form()
-)
+// const parseFormDataPromise = util.promisify(
+// 	() => {
+// 		new multiparty.Form()
+// 	}
+// )
 
 router.post('/', validateToken, async (req, res) => {
 	let isErrorFound = 0
 	var receivedImagesCount
 	req.newFilesNames = []
 	try {
-		await parseFormDataPromise.parse(req, (err, fields, files) => {
+		new multiparty.Form().parse(req, (err, fields, files) => {
 			if (err) console.log('errrrr' + err)
 			else receivedImagesCount = files["images"].length
 			console.log('files >>>>>>>>>>>>>\n' + files["images"].length)
 		});
+		console.log(req.files)
 		console.log('+++++++++' + receivedImagesCount)
 		var result = await queryPromise("SELECT * FROM images WHERE uid = ? AND isProfileImage = 0", req.user.id)
 		nbImagesCanUploadMore = 4 - result.length < 0 ? 0 : 4 - result.length
