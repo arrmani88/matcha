@@ -5,14 +5,15 @@ const multer = require('multer')
 const crypto = require('crypto')
 const validateToken = require('../middlewares/validate_token')
 const dbController = require('../models/db_controller')
+const fs = require('fs')
 const util = require('util')
 const queryPromise = util.promisify(dbController.query.bind(dbController))
-const multiparty = require('multiparty')
-let nbImagesCanUploadMore
+var nbImagesCanUploadMore
+var receivedImagesCount
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'images')
+		cb(null, 'parsed_images')
 	},
 	filename: (req, file, cb) => {
 		let newImageName = Date.now() + "_" + crypto.createHash('md5').update(file.originalname).digest('hex') + path.extname(file.originalname)
@@ -20,7 +21,6 @@ const storage = multer.diskStorage({
 		cb(null, newImageName)
 	},
 })
-
 const multi_upload = util.promisify(
 	multer({
 		storage,
@@ -28,42 +28,38 @@ const multi_upload = util.promisify(
 		fileFilter: (req, file, cb) => {
 			if (file.mimetype != 'image/jpg' && file.mimetype != 'image/jpeg' && file.mimetype != 'image/png')
 				return cb("Invalid file type, try uploading a '.jpg', '.jpeg' or a '.png' file")
-			else cb(null, true)
+			else {
+				receivedImagesCount++
+				cb(null, true)
+			}
 		}
-	}).array('images', nbImagesCanUploadMore)
+	}).array('images', 4)
 )
 
-// const parseFormDataPromise = util.promisify(
-// 	() => {
-// 		new multiparty.Form()
-// 	}
-// )
-
 router.post('/', validateToken, async (req, res) => {
-	let isErrorFound = 0
-	var receivedImagesCount
+	receivedImagesCount = 0
 	req.newFilesNames = []
 	try {
-		new multiparty.Form().parse(req, (err, fields, files) => {
-			if (err) console.log('errrrr' + err)
-			else receivedImagesCount = files["images"].length
-			console.log('files >>>>>>>>>>>>>\n' + files["images"].length)
-		});
-		console.log(req.files)
-		console.log('+++++++++' + receivedImagesCount)
+		if (!fs.existsSync('./images')) fs.mkdirSync('./images')
+		if (!fs.existsSync('./parsed_images')) fs.mkdirSync('./parsed_images')
+		// upload the images to ./parsed_images
+		await multi_upload(req, res)
+		// query how many images the user has
 		var result = await queryPromise("SELECT * FROM images WHERE uid = ? AND isProfileImage = 0", req.user.id)
 		nbImagesCanUploadMore = 4 - result.length < 0 ? 0 : 4 - result.length
-		if (nbImagesCanUploadMore > 0) {
-			await multi_upload(req, res)
-			for (var index = 0; index < req.files.length && isErrorFound == 0; index++)
+		// if the user can upload more images
+		if (nbImagesCanUploadMore > 0 && receivedImagesCount <= nbImagesCanUploadMore) {
+			for (var index = 0; index < req.files.length ; index++) {
+				// move the images from './parsed_images to ./images
+				fs.rename(`./parsed_images/${req.newFilesNames[index]}`, `./images/${req.newFilesNames[index]}`, (err) => {if (err) throw err })
 				await queryPromise("INSERT INTO images(uid, isProfileImage, image) VALUES(?, ?, ?)", [req.user.id, 0, req.newFilesNames[index]],)
+			}
 			res.send('Images sent successfully')
 		} else {
-			res.send(
-				nbImagesCanUploadMore != 0 ?
-				`You can upload only ${nbImagesCanUploadMore} more images` :
-				'You reached the limit of the images that you can upload (4 images), try deleting some images to replace them'
-			)
+			for (var index = 0; index < req.files.length ; index++)
+				// delete the images from ./parsed_images
+				fs.unlinkSync(`./parsed_images/${req.newFilesNames[index]}`)
+			res.send(nbImagesCanUploadMore != 0 ? `You can upload only ${nbImagesCanUploadMore} more images` : 'You reached the limit of the images that you can upload (4 images), try deleting some images to replace them')
 		}
 	} catch (err) {
 		console.log(err)

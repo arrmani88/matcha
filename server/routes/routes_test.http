@@ -185,3 +185,14 @@ Content-Type: application/json
 }
 
 # -------------------------------------------------------------------------
+### ------------------------- DELETE FEED IMAGES --------------------------
+POST {{hostname}}/delete_feed_images
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "images": [
+        "1657051058401_799bad5a3b514f096e69bbc4a7896cd9.jpg",
+        "1657051058399_156005c5baf40ff51a327f1c34f2975b.jpg"
+    ]
+}
