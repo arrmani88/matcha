@@ -18,6 +18,9 @@ const block = require('./routes/block')
 const unblock = require('./routes/unblock')
 const getBlockedUsers = require('./routes/get_blocked_users')
 const deleteFeedImages = require('./routes/delete_feed_images')
+const getUser = require('./routes/get_user')
+const getLikers = require('./routes/get_likers')
+const getVisitors = require('./routes/get_visitors')
 
 app.use(express.json())
 app.use('/register', register)
@@ -34,10 +37,12 @@ app.use('/block', block)
 app.use('/unblock', unblock)
 app.use('/get_blocked_users', getBlockedUsers)
 app.use('/delete_feed_images', deleteFeedImages)
+app.use('/get_user', getUser)
+app.use('/get_likers', getLikers)
+app.use('/get_visitors', getVisitors)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
 
 // nodemon -x "printf '\x1Bc';node" index.js
 // npm install -g --force nodemon
-// INSERT INTO tags(title) VALUES('football')

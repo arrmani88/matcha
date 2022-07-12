@@ -98,7 +98,6 @@ Content-Type: image/jpeg
 # value-> between 1 and 4 images
 # each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
 # -------------------------------------------------------------------------
-
 ### ----------------------- SEND RESET PASSWORD EMAIL ---------------------
 GET {{hostname}}/reset_password
 Content-Type: application/json
@@ -137,7 +136,6 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "likerID": 1,
     "likedID": 2
 }
 
@@ -148,18 +146,27 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "unlikerID": 1,
     "unlikedID": 2
 }
 
 # -------------------------------------------------------------------------
+### --------------------------  DROP PROFILE  -----------------------------
+POST {{hostname}}/drop
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "dropedID": 2
+}
+
+# -------------------------------------------------------------------------
+
 ### --------------------------  BLOCK PROFILE -----------------------------
 POST {{hostname}}/block
 Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "uid": 1,
     "blockedID": 2
 }
 
@@ -170,7 +177,6 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "uid": 1,
     "unblockedID": 2
 }
 
@@ -178,11 +184,6 @@ Content-Type: application/json
 ### ------------------------- GET BLOCKED USERS ---------------------------
 GET {{hostname}}/get_blocked_users
 Authorization: {{token}}
-Content-Type: application/json
-
-{
-    "uid": 1
-}
 
 # -------------------------------------------------------------------------
 ### ------------------------- DELETE FEED IMAGES --------------------------
@@ -195,4 +196,40 @@ Content-Type: application/json
         "1657051058401_799bad5a3b514f096e69bbc4a7896cd9.jpg",
         "1657051058399_156005c5baf40ff51a327f1c34f2975b.jpg"
     ]
+}
+
+# -------------------------------------------------------------------------
+### ------------------------------ GET USER -------------------------------
+GET {{hostname}}/get_user
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+    "id": 2
+}
+
+# -------------------------------------------------------------------------
+### ------------------------------ GET LIKERS ------------------------------
+GET {{hostname}}/get_likers
+Authorization: {{token}}
+# -------------------------------------------------------------------------
+### ---------------------------- GET VISITORS -----------------------------
+GET {{hostname}}/get_visitors
+Authorization: {{token}}
+
+# -------------------------------------------------------------------------
+### --------------------------- GET FEDD USERS ----------------------------
+GET {{hostname}}/get_feed_users
+Authorization: {{token}}
+
+{
+    "ageMin": 17,
+    "ageMax": 24,
+    "distance": 20,
+    "ratingMin": 100,
+    "ratingMax": 1000,
+    "sortedCommonTagsIDs": [1, 4, 8],
+    "sort": ["age", "distance", "rating", "tags"],
+    "pageNb": 2,
+    "userPerPage": 10
 }

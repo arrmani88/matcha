@@ -59,6 +59,7 @@ router.post('/', validateToken, async (req, res) => {
 		res.send("Profile image upladed successfully")
 	} catch (err) {
 		console.log(err)
+		res.status(400).json({ error: err })
 	}
 })
 

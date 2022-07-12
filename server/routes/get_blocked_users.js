@@ -30,13 +30,11 @@ const getArrayOfIDs = async (result) => {
 	return rtrn
 }
 
-// router.get('/', validateToken, isAccountComplete, async (req, res) => {
-router.get('/', async (req, res) => {
-	const { uid } = req.body
+router.get('/', validateToken, isAccountComplete, async (req, res) => {
 	try {
 		var result = await queryPromise(
 			"SELECT * FROM blocks WHERE uid = ?",
-			uid
+			req.user.id
 		)
 		res.send(await getArrayOfIDs(result))
 	} catch (err) {
