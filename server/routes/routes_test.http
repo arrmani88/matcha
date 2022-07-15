@@ -221,15 +221,16 @@ Authorization: {{token}}
 ### --------------------------- GET FEDD USERS ----------------------------
 GET {{hostname}}/get_feed_users
 Authorization: {{token}}
+Content-Type: application/json
 
 {
     "ageMin": 17,
-    "ageMax": 24,
+    "ageMax": 30,
+    "ratingMin": 0,
+    "ratingMax": 10,
     "distance": 20,
-    "ratingMin": 100,
-    "ratingMax": 1000,
     "sortedCommonTagsIDs": [1, 4, 8],
-    "sort": ["age", "distance", "rating", "tags"],
-    "pageNb": 2,
-    "userPerPage": 10
+    "sort": ["distance", "rating", "tags"],
+    "pageNb": 1,
+    "userPerPage": 20
 }

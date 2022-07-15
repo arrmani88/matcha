@@ -3,12 +3,12 @@ const mysql = require('mysql')
 try {
     const dbController = mysql.createConnection({
         host: 'localhost',
-        port: 3307,
+        port: 3306,
         user: 'root',
-        password: 'root',
+        password: '',
         database: 'matcha'
     })
     module.exports = dbController
-} catch (error) {
+} catch (err) {
     console.log(err)
 }

@@ -21,6 +21,7 @@ const deleteFeedImages = require('./routes/delete_feed_images')
 const getUser = require('./routes/get_user')
 const getLikers = require('./routes/get_likers')
 const getVisitors = require('./routes/get_visitors')
+const getFeedUsers = require('./routes/get_feed_users')
 
 app.use(express.json())
 app.use('/register', register)
@@ -40,6 +41,7 @@ app.use('/delete_feed_images', deleteFeedImages)
 app.use('/get_user', getUser)
 app.use('/get_likers', getLikers)
 app.use('/get_visitors', getVisitors)
+app.use('/get_feed_users', getFeedUsers)
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
