@@ -11,12 +11,12 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 	try {
 		if (req.user.id == likedID) return res.status(400).send("Are you trying to like your own profile ?, sorry this isn't possible")
 		var result = await queryPromise( // to see if the user already liked the profile
-			"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
+			"SELECT * FROM likes WHERE uid = ? AND likedID = ?",
 			[req.user.id, likedID]
 		)
 		if (result.length == 0) {
 			await queryPromise(
-				"INSERT INTO likes(likerID, likedID) VALUES(?,?)",
+				"INSERT INTO likes(uid, likedID) VALUES(?,?)",
 				[req.user.id, likedID],
 			)
 			await queryPromise( // increment fame rating
@@ -24,7 +24,7 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 				[likedID]
 			)
 			result = await queryPromise( // to see if both profiles like each other to match them
-				"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
+				"SELECT * FROM likes WHERE uid = ? AND likedID = ?",
 				[likedID, req.user.id]
 			)
 			if (result.length == 0) {

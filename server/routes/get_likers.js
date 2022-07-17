@@ -11,7 +11,7 @@ const getArrayOfUSers = async (result) => {
         var usr
         var usrImg
         for (var i = 0; i < result.length; i++) {
-            usr = await queryPromise(`SELECT * FROM users WHERE id = ${result[i].likerID} LIMIT 1`)
+            usr = await queryPromise(`SELECT * FROM users WHERE id = ${result[i].uid} LIMIT 1`)
             usrImg = await queryPromise(`SELECT * FROM images WHERE uid = ${usr[0].id} AND isProfileImage = 1 LIMIT 1`)
             ret.push({
                 id: usr[0].id,

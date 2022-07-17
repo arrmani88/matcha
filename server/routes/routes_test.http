@@ -27,7 +27,7 @@ Authorization: {{token}}
     "biography": "some dwescription ....",
     "city": "Casablanca",
     "latitude": 15.8018625,
-    "longtitude": 16.4505496,
+    "longitude": 16.4505496,
     "tags": ["aa", "bb", "cc", "dd", "ee"]
 }
 
@@ -225,12 +225,11 @@ Content-Type: application/json
 
 {
     "ageMin": 1,
-    "ageMax": 3000,
+    "ageMax": 3001,
     "ratingMin": 0,
-    "ratingMax": 10,
-    "distance": 20,
+    "ratingMax": 100,
+    "distance": 1000,
     "commonTagsIDs": [1, 2, 3],
-    # "sort": ["distance", "rating", "tags"],
     "pageNb": 1,
-    "userPerPage": 20
+    "userPerPage": 100
 }

@@ -10,12 +10,12 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 	const { unlikedID } = req.body
 	try {
 		var result = await queryPromise( // to check whether the user already likes the profile or not
-			"SELECT * FROM likes WHERE likerID = ? AND likedID = ?",
+			"SELECT * FROM likes WHERE uid = ? AND likedID = ?",
 			[req.user.id, unlikedID]
 		)
 		if (result.length == 1) {
 			await queryPromise( // delete the like
-				"DELETE FROM likes WHERE likerID = ? AND likedID = ?",
+				"DELETE FROM likes WHERE uid = ? AND likedID = ?",
 				[req.user.id, unlikedID],
 			)
 			await queryPromise( // decrement fame rating

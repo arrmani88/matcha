@@ -97,7 +97,7 @@ const getNewTagsIDs = async (newTags) => {
 const updateUsersTags = async (oldTagsIDs, newTagsIDs, uid) => {
 	for (let index = 0 ; index < newTagsIDs.length ; index++) {
 		await queryPromise(
-			"UPDATE usersTags SET tagId = ? WHERE uid = ? AND tagId = ? LIMIT 1",
+			"UPDATE usersTags SET tagID = ? WHERE uid = ? AND tagID = ? LIMIT 1",
 			[newTagsIDs[index], uid, oldTagsIDs[index]]
 		)
 	}

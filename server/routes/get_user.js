@@ -24,12 +24,12 @@ router.get('/', validateToken, async (req, res) => {
                 gender : result[0].gender,
                 sexualPreferences: result[0].sexualPreferences,
                 biography: result[0].biography,
-                longtitude: result[0].longtitude,
+                longitude: result[0].longitude,
                 latitude: result[0].latitude,
             })
             if (id != req.user.id) {
                 await queryPromise(
-                    "INSERT INTO visitedProfiles(visited, visitor) VALUES(?, ?)",
+                    "INSERT INTO visitedProfiles(visited, uid) VALUES(?, ?)",
                     [id, req.user.id]
                 )
             }

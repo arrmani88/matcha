@@ -20,11 +20,11 @@ router.post('/', validateToken, isAccountComplete, async (req, res) => {
 				[req.user.id, blockedID],
 			)
 			await queryPromise( // removing the likes
-				"DELETE FROM likes WHERE likerID = ? AND likedID = ?",
+				"DELETE FROM likes WHERE uid = ? AND likedID = ?",
 				[req.user.id, blockedID]
 			)
 			await queryPromise( // removing the likes
-				"DELETE FROM likes WHERE likerID = ? AND likedID = ?",
+				"DELETE FROM likes WHERE uid = ? AND likedID = ?",
 				[blockedID, req.user.id]
 			)
 			await queryPromise( // unmatch the profiles

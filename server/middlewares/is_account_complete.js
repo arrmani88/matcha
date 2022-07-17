@@ -2,7 +2,7 @@ const { handle } = require('express/lib/application')
 const dbController = require('../models/db_controller')
 
 const isAccountComplete = (req, res, next) => {
-	if ((req.body.likerID || req.body.unlikerID || req.body.uid) != null) req.body.id = (req.body.likerID || req.body.unlikerID || req.body.uid)
+	if ((req.body.uid || req.body.unlikerID) != null) req.body.id = (req.body.uid || req.body.unlikerID)
 	dbController.query(
 		"SELECT * FROM users WHERE username = ? OR id = ? LIMIT 1",
 		[req.body.username, req.user.id],
@@ -22,6 +22,7 @@ const isAccountComplete = (req, res, next) => {
 						+ (result[0].areTagsAdded == 0 ? "Tags" : "")
 				})
 			} else {
+				req.user = result[0]
 				next()
 			}
 		}
