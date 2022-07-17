@@ -224,12 +224,12 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "ageMin": 17,
-    "ageMax": 30,
+    "ageMin": 1,
+    "ageMax": 3000,
     "ratingMin": 0,
     "ratingMax": 10,
     "distance": 20,
-    "sortedCommonTagsIDs": [1, 2, 3],
+    "commonTagsIDs": [1, 2, 3],
     # "sort": ["distance", "rating", "tags"],
     "pageNb": 1,
     "userPerPage": 20
