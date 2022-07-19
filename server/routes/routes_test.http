@@ -228,8 +228,8 @@ Content-Type: application/json
     "ageMax": 3001,
     "ratingMin": 0,
     "ratingMax": 100,
-    "distance": 1000,
-    "commonTagsIDs": [1, 2, 3],
+    "distance": 10000,
+    "commonTagsIDs": [1, 2, 3, 4, 5],
     "pageNb": 1,
     "userPerPage": 100
 }
