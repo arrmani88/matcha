@@ -41,7 +41,7 @@ app.use('/delete_feed_images', deleteFeedImages)
 app.use('/get_user', getUser)
 app.use('/get_likers', getLikers)
 app.use('/get_visitors', getVisitors)
-app.use('/get_feed_users', getFeedUsers)
+app.use('/get_feed_users', getFeedUsers)  
 
 server.listen(port, () => console.log(`Matcha listening on port ${port}`))
 
