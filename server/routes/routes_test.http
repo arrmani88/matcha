@@ -1,4 +1,4 @@
-@hostname = http://localhost:3000
+@hostname = http://localhost:3001
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTU0NzAyNjB9.jwbDc_qdpzlc14n7er7XU1VH8zuByKtBZ-nDNxWnCPo
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
