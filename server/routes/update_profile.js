@@ -14,10 +14,10 @@ let j
 let count = 1
 
 const getArrayOfUpdatedFields = (body, id) => {
-	const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newCity, newGender, newSexualPreferences, newBiography } = body
+	const { newfirstName, newlastName, newUsername, newEmail, newPassword, newBirthday, newCity, newGender, newSexualPreferences, newBiography } = body
 	let rtrn = []
-	newFirstname != null ? rtrn.push(newFirstname) : 0
-	newLastname != null ? rtrn.push(newLastname) : 0
+	newfirstName != null ? rtrn.push(newfirstName) : 0
+	newlastName != null ? rtrn.push(newlastName) : 0
 	newUsername != null ? rtrn.push(newUsername) : 0
 	newEmail != null ? rtrn.push(newEmail) : 0
 	newPassword != null ? rtrn.push(newPassword) : 0
@@ -105,7 +105,7 @@ const updateUsersTags = async (oldTagsIDs, newTagsIDs, uid) => {
 
 router.post('/', confirmIdentityWithPassword, isAccountComplete, async (req, res) => {
 	try {
-		const { newFirstname, newLastname, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
+		const { newfirstName, newlastName, newUsername, newEmail, newPassword, newBirthday, newGender, newSexualPreferences, newBiography, oldTags, newTags} = req.body
 		if (newTags != null && oldTags != null) {
 			await getOldTagsIDs(oldTags)
 			await getNewTagsIDs(newTags)
@@ -113,8 +113,8 @@ router.post('/', confirmIdentityWithPassword, isAccountComplete, async (req, res
 		}
 		result = await queryPromise(
 			"UPDATE users SET " +
-				(newFirstname != null ? "firstname = ? " : "") +
-				(newLastname != null ? "lastname = ? " : "") +
+				(newfirstName != null ? "firstName = ? " : "") +
+				(newlastName != null ? "lastName = ? " : "") +
 				(newUsername != null ? "username = ? " : "") +
 				(newEmail != null ? "email = ? " : "") +
 				(newPassword != null ? "password = ? " : "") +

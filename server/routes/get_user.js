@@ -15,8 +15,8 @@ router.get('/', validateToken, async (req, res) => {
         if (result.length) {
             res.json({
                 id: result[0].id,
-                firstname: result[0].firstname,
-                lastname : result[0].lastname,
+                firstName: result[0].firstName,
+                lastName : result[0].lastName,
                 username : result[0].username,
                 email : result[0].email,
                 birthday : result[0].birthday,

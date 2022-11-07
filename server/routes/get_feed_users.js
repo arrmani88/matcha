@@ -11,7 +11,7 @@ router.get('/', validateToken, isAccountComplete, async (req, res) => {
 	try {
 		var result = await queryPromise(
 			`SELECT users.id, fameRating, ` +
-				`firstname, lastname, username, email, city, gender, sexualPreferences, biography, longitude, latitude, ` +
+				`firstName, lastName, username, email, city, gender, sexualPreferences, biography, longitude, latitude, ` +
 				`GROUP_CONCAT(DISTINCT images.image ORDER BY images.image) AS images, \n` +
 				`(SELECT COUNT(images.image) FROM images WHERE images.uid = users.id) AS imagesCount, ` +
 				`(SELECT count(usersTags.uid) FROM usersTags ` +

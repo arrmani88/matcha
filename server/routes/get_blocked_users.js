@@ -21,8 +21,8 @@ const getArrayOfIDs = async (result) => {
 		))[0].image
 		rtrn.push({
 			id: tmpUser.id,
-			firstname: tmpUser.firstname,
-			lastname: tmpUser.lastname,
+			firstName: tmpUser.firstName,
+			lastName: tmpUser.lastName,
 			username: tmpUser.username,
 			profileImage: tmpImg
 		})

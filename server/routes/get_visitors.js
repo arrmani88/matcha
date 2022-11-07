@@ -16,8 +16,8 @@ router.get('/', validateToken, async (req, res) => {
         ret.push({
             id: usr[0].id,
             username: usr[0].username,
-            firstname: usr[0].firstname,
-            lastname: usr[0].lastname,
+            firstName: usr[0].firstName,
+            lastName: usr[0].lastName,
             profile_image: usrImg[0].image,
             at: result[i].created_at
         })
