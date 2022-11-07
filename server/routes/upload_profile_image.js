@@ -38,6 +38,8 @@ const upload = util.promisify(
 
 router.post('/', validateToken, async (req, res) => {
 	try {
+		if (!fs.existsSync('./images')) // create the folder /images if it doesn't exist
+			fs.mkdirSync('./images')
 		var result = await queryPromise( // check if a profile picture already exists, to remplace it
 			"SELECT * FROM images WHERE uid = ? AND isProfileImage = 1",
 			[req.user.id]
@@ -50,11 +52,13 @@ router.post('/', validateToken, async (req, res) => {
 				[req.user.id, 1, newImageName],
 			)
 		} else { // else if a profile image exists
-			fs.unlinkSync(`./images/${result[0].image}`) // delete the image from ./images/
-			await queryPromise(
-				"UPDATE images SET image = ? WHERE id = ?",
-				[newImageName, result[0].id]
-			)
+			if (fs.existsSync(`./images/${result[0].image}`)) { // we know the img exists in the DB, but check if the file exists in the /images folder or has been deleted manually
+				fs.unlinkSync(`./images/${result[0].image}`) // delete the image from ./images/
+				await queryPromise(
+					"UPDATE images SET image = ? WHERE id = ?",
+					[newImageName, result[0].id]
+				)
+			}
 		}
 		res.send("Profile image upladed successfully")
 	} catch (err) {
