@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
                 from: 'noreply@matcha.com',
                 to: process.env.EMAIL_ADDR,
                 subject: "Matcha account confirmation",
-                html: `${process.env.SERVER_HOSTNAME}/confirm_email/${emailConfirmationToken}`,
+                html: `${process.env.CLIENT_HOSTNAME}/confirm_email/${emailConfirmationToken}`,
               },
               (err, info) => {
                 console.log(
