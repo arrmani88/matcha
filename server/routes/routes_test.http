@@ -52,9 +52,9 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="image"; filename="1.jpg"
+Content-Disposition: form-data; name="image"; filename="anas.jpeg"
 
-< ~/Desktop/1.jpg
+< /Users/anel-bou/http_files/anas.jpeg
 --boundary--
 # image should be either '.jpg', '.jpeg', or '.png', and less than 1024*1024 bytes (1MB)
 # -------------------------------------------------------------------------
@@ -64,20 +64,20 @@ Authorization: {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="images"; filename="1.jpg"
+Content-Disposition: form-data; name="images"; filename="fCL.jpeg"
 Content-Type: image/jpeg
 
-< ~/Desktop/1.jpg
+< /Users/anel-bou/http_files/fCL.jpeg
 --boundary
-Content-Disposition: form-data; name="images"; filename="2.jpg"
+Content-Disposition: form-data; name="images"; filename="mgn.jpeg"
 Content-Type: image/jpeg
 
-< ~/Desktop/2.jpg
+< /Users/anel-bou/http_files/mgn.jpeg
 --boundary
-Content-Disposition: form-data; name="images"; filename="3.jpg"
+Content-Disposition: form-data; name="images"; filename="ana-zwin.jpeg"
 Content-Type: image/jpeg
 
-< ~/Desktop/3.jpg
+< /Users/anel-bou/http_files/ana-zwin.jpeg
 --boundary--
 # key-> images
 # value-> between 1 and 4 images
@@ -233,3 +233,10 @@ Content-Type: application/json
     "pageNb": 1,
     "userPerPage": 100
 }
+
+# -------------------------------------------------------------------------
+### ------------------------------- GET ME --------------------------------
+GET {{hostname}}/get_me
+Authorization: {{token}}
+
+# -------------------------------------------------------------------------
