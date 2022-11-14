@@ -20,7 +20,7 @@ let transporter = nodemailer.createTransport({
 // send email to reset password
 router.get("/", (req, res) => {
 	const { login } = req.body;
-	if (!login) res.status(400).json({ error: 'login is a required field' })
+	if (!login) return res.status(400).json({ error: 'login is a required field' })
 	const resetPasswordToken = sign(
 		{ login },
 		process.env.PASSWORD_RESET_RANDOM_STRING
