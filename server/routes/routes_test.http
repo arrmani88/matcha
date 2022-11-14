@@ -99,11 +99,11 @@ Content-Type: image/jpeg
 # each image should be either '.jpg', '.jpeg', or '.png', and less than (1024*1024) bytes (1MB)
 # -------------------------------------------------------------------------
 ### ----------------------- SEND RESET PASSWORD EMAIL ---------------------
-GET {{hostname}}/reset_password
+POST {{hostname}}/reset_password
 Content-Type: application/json
 
 {
-    "login": "ss"
+    "login": "arrmani88"
 }
 
 # send either username or email under the key "login"

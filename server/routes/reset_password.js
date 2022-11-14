@@ -18,9 +18,9 @@ let transporter = nodemailer.createTransport({
 });
 
 // send email to reset password
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
 	const { login } = req.body;
-	if (!login) return res.status(400).json({ error: 'login is a required field' })
+	if (!login) return res.status(404).json({ error: 'Login is a required field' })
 	const resetPasswordToken = sign(
 		{ login },
 		process.env.PASSWORD_RESET_RANDOM_STRING
@@ -29,9 +29,8 @@ router.get("/", (req, res) => {
 		"SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1",
 		[login, login],
 		(err, result) => {
-			console.log(result)
 			if (err) res.status(400).json({ error: err, description: err.message });
-			else if (result.length === 0) res.status(404).json({ error: 'user not found' })
+			else if (result.length === 0) res.status(404).json({ error: 'User not found' })
 			else {
 				let sentEmail = transporter.sendMail(
 					{
