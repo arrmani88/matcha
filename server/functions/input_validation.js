@@ -14,7 +14,7 @@ function isEmail(email) {
 }
 	
 function isPassword(password) {
-	const rgx = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/
+	const rgx = /{6,20}$/
 	return rgx.test(String(password))
 }
 

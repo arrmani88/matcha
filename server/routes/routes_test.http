@@ -13,7 +13,7 @@ Content-Type: application/json
 }
 
 # username: between 2 & 35 characters, and can be alphanumeric
-# password: minimum 8 characters, at least one letter
+# password: between 6 and 20 characters
 # -------------------------------------------------------------------------
 ### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
