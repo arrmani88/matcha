@@ -14,7 +14,7 @@ const validateLoginInput = async (req, res, next) => {
 		}
 		else if ((!isUsername(login) && !isEmail(login)) || !isPassword(password)) {
 			res.status(422)
-			return res.json({error: {"details": "Invalid login or password"}})
+			return res.json({error: {"details": "Invalid login or password syntax"}})
 		} else {
 			next()
 		}

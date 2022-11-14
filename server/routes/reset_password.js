@@ -7,6 +7,19 @@ const dbController = require("../models/db_controller");
 const { Router } = require("express");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
+const { isPassword } = require("../functions/input_validation");
+const e = require("express");
+
+const validatePassword = async (req, res, next) => {
+	try {
+		const { password } = req.body
+		if (!password) return res.status(422).json({ details: 'Password is a required field'})
+		else if (!isPassword(password)) return res.status(422).json({ details: 'Password should be between 6 ans 20 characters' })
+		else next()
+	} catch (error) {
+		console.log(error)
+	}
+}
 
 let transporter = nodemailer.createTransport({
 	host: "smtp.ethereal.email",
@@ -51,7 +64,7 @@ router.post("/", (req, res) => {
 });
 
 // update password in DB
-router.post("/:token", (req, res) => {
+router.post("/:token", validatePassword, (req, res) => {
 	const token = req.params.token;
 	const { password } = req.body;
 	const decodedData = verify(token, process.env.PASSWORD_RESET_RANDOM_STRING);

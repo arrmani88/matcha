@@ -33,7 +33,7 @@ const validateRegistrationInput = async (req, res, next) => {
       res.status(422);
       return res.json({
         error: {
-          details: "Field 'password' should contain minimum 8 characters, at least one letter",
+          details: "Password should be between 6 and 20 characters",
         },
       });
     } else {
