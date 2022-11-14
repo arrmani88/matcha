@@ -103,7 +103,7 @@ GET {{hostname}}/reset_password
 Content-Type: application/json
 
 {
-    "login": "arrmani88"
+    "login": "ss"
 }
 
 # send either username or email under the key "login"

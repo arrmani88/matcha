@@ -20,23 +20,35 @@ let transporter = nodemailer.createTransport({
 // send email to reset password
 router.get("/", (req, res) => {
 	const { login } = req.body;
+	if (!login) res.status(400).json({ error: 'login is a required field' })
 	const resetPasswordToken = sign(
 		{ login },
 		process.env.PASSWORD_RESET_RANDOM_STRING
 	);
-	let sentEmail = transporter.sendMail(
-		{
-			from: process.env.EMAIL_ADDR,
-			to: "pirotil826@falkyz.com",
-			subject: "Matcha password reset",
-			html: `${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`,
-		},
-		(err, info) => {
-			console.log(`${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`);
-			if (err) res.status(400).json({ error: err.stack });
-			else res.json("An email was sent to your mailbox to reset your password, please check your inbox");
+	dbController.query(
+		"SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1",
+		[login, login],
+		(err, result) => {
+			console.log(result)
+			if (err) res.status(400).json({ error: err, description: err.message });
+			else if (result.length === 0) res.status(404).json({ error: 'user not found' })
+			else {
+				let sentEmail = transporter.sendMail(
+					{
+						from: process.env.EMAIL_ADDR,
+						to: "pirotil826@falkyz.com",
+						subject: "Matcha password reset",
+						html: `${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`,
+					},
+					(err, info) => {
+						console.log(`${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`);
+						if (err) res.status(400).json({ error: err.stack });
+						else res.json("An email was sent to your mailbox to reset your password, please check your inbox");
+					}
+				);
+			}
 		}
-	);
+	)
 });
 
 // update password in DB
