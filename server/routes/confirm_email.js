@@ -16,7 +16,6 @@ router.get('/:emailConfirmationToken', async (req, res) => {
                 decodedData.id,
                 (error, result) => {
                     if (error) {
-                        console.log(error)
                         return res.status(400).json(error)
                     }
                     user = result
@@ -24,18 +23,25 @@ router.get('/:emailConfirmationToken', async (req, res) => {
                         "UPDATE users SET isAccountConfirmed = ? WHERE id = ?",
                         [1, decodedData.id],
                         (err) => {
-                            console.log('uid=' + decodedData.id)
-                            if (err) res.status(400).json({ error: err })
-                            else { 
+                            if (err) return res.status(400).json({ error: err })
+                            else {
                                 const accessToken = sign(
                                     { username: decodedData.username, id: decodedData.id },
                                     process.env.LOGIN_RANDOM_STRING
                                 )
-                                const { password, created_at, updated_at, fameRating, areTagsAdded, ...userPublicData } = result[0]
-                                res.json({
-                                    'access_token': accessToken,
-                                    ...userPublicData
-                                })
+                                dbController.query(
+                                    'SELECT * FROM images WHERE uid = ?',
+                                    decodedData.id,
+                                    (error, images) => {
+                                        if (error) return res.status(400).json({ error })
+                                        const { password, created_at, updated_at, fameRating, areTagsAdded, ...userPublicData } = result[0]
+                                        res.json({
+                                            'access_token': accessToken,
+                                            ...userPublicData,
+                                            images: images
+                                        })
+                                    }
+                                )
                             }
                         }
                     )
@@ -43,7 +49,6 @@ router.get('/:emailConfirmationToken', async (req, res) => {
             )
         }
     } catch (error) {
-        console.log(error)
         return res.status(400).json({ error })
     }
 })
