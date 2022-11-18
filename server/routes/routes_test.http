@@ -15,6 +15,9 @@ Content-Type: application/json
 # username: between 2 & 35 characters, and can be alphanumeric
 # password: between 6 and 20 characters
 # -------------------------------------------------------------------------
+### -------------------------- confirm PROFILE ---------------------------
+GET {{hostname}}/confirm_email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2Njg3ODAwMzZ9.D99HJt1jGdPhgWaYFlQDZrPMLFpZ8aJwZsrYMtl8YkE
+# -------------------------------------------------------------------------
 ### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json

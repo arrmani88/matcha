@@ -10,8 +10,6 @@ const dbController = require("../models/db_controller");
 const fieldIsNullMessage = "One of the fields 'firstName', 'lastName', 'username', 'email' or 'password' is empty or wasn't sent";
 
 const validateRegistrationInput = async (req, res, next) => {
-  console.log(process.env.EMAIL_ADDR);
-  console.log(process.env.EMAIL_PASS);
   try {
     const { firstName, lastName, username, email, password } = req.body;
     if (!firstName || !lastName || !username || !email || !password) {
@@ -31,11 +29,7 @@ const validateRegistrationInput = async (req, res, next) => {
       return res.json({ error: { details: "Invalid 'email' syntax" } });
     } else if (!isPassword(password)) {
       res.status(422);
-      return res.json({
-        error: {
-          details: "Password should be between 6 and 20 characters",
-        },
-      });
+      return res.json({error: { details: "Password should be between 6 and 20 characters" }});
     } else {
       dbController.query(
         "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? LIMIT 1",
@@ -48,7 +42,7 @@ const validateRegistrationInput = async (req, res, next) => {
       );
     }
   } catch (error) {
-    return console.log(error);
+    return res.status(400).json(error)
   }
 };
 
@@ -69,7 +63,7 @@ router.post("/", async (req, res) => {
       "INSERT INTO users(firstName, lastName, username, email, password) VALUES(?,?,?,?,?);",
       [firstName, lastName, username, email, hashedPassword],
       (error) => {
-        if (error) return res.status(400).json(error);
+        if (error) return res.status(400).json(error)
       }
     );
     dbController.query(
@@ -93,7 +87,7 @@ router.post("/", async (req, res) => {
               },
               (err, info) => {
                 console.log(
-                  `${process.env.SERVER_HOSTNAME}/confirm_email/${emailConfirmationToken}`
+                  `${process.env.CLIENT_HOSTNAME}/confirm_email/${emailConfirmationToken}`
                 );
                 if (err) res.status(400).json({ error: err.stack });
                 else

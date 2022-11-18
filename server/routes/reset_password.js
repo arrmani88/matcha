@@ -50,10 +50,10 @@ router.post("/", (req, res) => {
 						from: process.env.EMAIL_ADDR,
 						to: "pirotil826@falkyz.com",
 						subject: "Matcha password reset",
-						html: `${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`,
+						html: `${process.env.CLIENT_HOSTNAME}/reset_password/${resetPasswordToken}`,
 					},
 					(err, info) => {
-						console.log(`${process.env.SERVER_HOSTNAME}/reset_password/${resetPasswordToken}`);
+						console.log(`${process.env.CLIENT_HOSTNAME}/reset_password/${resetPasswordToken}`);
 						if (err) res.status(400).json({ error: err.stack });
 						else res.json("An email was sent to your mailbox to reset your password, please check your inbox");
 					}
@@ -67,7 +67,13 @@ router.post("/", (req, res) => {
 router.post("/:token", validatePassword, (req, res) => {
 	const token = req.params.token;
 	const { password } = req.body;
-	const decodedData = verify(token, process.env.PASSWORD_RESET_RANDOM_STRING);
+	// try {
+		const decodedData = verify(token, process.env.PASSWORD_RESET_RANDOM_STRING);
+	// } catch (error) {
+	// 	return res.status(400).json({
+	// 		details : 
+	// 	})
+	// }
 	dbController.query(
 		"SELECT * FROM users WHERE username = ? OR email = ? LIMIT 1",
 		[decodedData.login, decodedData.login],
