@@ -5,9 +5,15 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const { isName, isUsername, isEmail, isPassword } = require("../functions/input_validation");
+const {
+  isName,
+  isUsername,
+  isEmail,
+  isPassword,
+} = require("../functions/input_validation");
 const dbController = require("../models/db_controller");
-const fieldIsNullMessage = "One of the fields 'firstName', 'lastName', 'username', 'email' or 'password' is empty or wasn't sent";
+const fieldIsNullMessage =
+  "One of the fields 'firstName', 'lastName', 'username', 'email' or 'password' is empty or wasn't sent";
 
 const validateRegistrationInput = async (req, res, next) => {
   try {
@@ -29,7 +35,9 @@ const validateRegistrationInput = async (req, res, next) => {
       return res.json({ error: { details: "Invalid 'email' syntax" } });
     } else if (!isPassword(password)) {
       res.status(422);
-      return res.json({error: { details: "Password should be between 6 and 20 characters" }});
+      return res.json({
+        error: { details: "Password should be between 6 and 20 characters" },
+      });
     } else {
       dbController.query(
         "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? LIMIT 1",
@@ -37,12 +45,15 @@ const validateRegistrationInput = async (req, res, next) => {
         (error, result) => {
           if (error) return console.log(error);
           if (result.length == 0) return next();
-          else return res.status(409).json({ Exception: { Details: "Username or email already used" }, });
+          else
+            return res.status(409).json({
+              Exception: { Details: "Username or email already used" },
+            });
         }
       );
     }
   } catch (error) {
-    return res.status(400).json(error)
+    return res.status(400).json(error);
   }
 };
 
@@ -55,15 +66,15 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-// router.post('/', validateRegistrationInput, async (req, res) => {
-router.post("/", async (req, res) => {
+router.post("/", validateRegistrationInput, async (req, res) => {
+  // router.post("/", async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
   bcrypt.hash(password, 10).then((hashedPassword) => {
     dbController.query(
       "INSERT INTO users(firstName, lastName, username, email, password) VALUES(?,?,?,?,?);",
       [firstName, lastName, username, email, hashedPassword],
       (error) => {
-        if (error) return res.status(400).json(error)
+        if (error) return res.status(400).json(error);
       }
     );
     dbController.query(
@@ -79,8 +90,8 @@ router.post("/", async (req, res) => {
               process.env.EMAIL_CONFIRMATION_RANDOM_STRING
             );
             let sentEmail = transporter.sendMail(
-              { 
-                from: 'noreply@matcha.com',
+              {
+                from: "noreply@matcha.com",
                 to: process.env.EMAIL_ADDR,
                 subject: "Matcha account confirmation",
                 html: `${process.env.CLIENT_HOSTNAME}/confirm_email/${emailConfirmationToken}`,

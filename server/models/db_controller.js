@@ -6,7 +6,7 @@ try {
     port: 3306,
     user: "root",
     password: "root",
-    database: "hypertube",
+    database: "matcha",
   });
   module.exports = dbController;
 } catch (err) {

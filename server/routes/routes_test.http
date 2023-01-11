@@ -9,7 +9,7 @@ Content-Type: application/json
     "lastName": "el boudali",
     "username": "arrmani88",
     "email": "a@a.com",
-    "password": "qweqwe123"
+    "password": "Q@qweqwe123"
 }
 
 # username: between 2 & 35 characters, and can be alphanumeric
@@ -21,7 +21,7 @@ GET {{hostname}}/confirm_email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFt
 ### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json
-Authorization: {{token}}
+Authorization: {{"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoemFiYWtoIiwiaWQiOjEsImlhdCI6MTY3MjI3NDEwNX0.xgAuoTNs-Y6gGgOKOgcEXMiwtzduWr1FZ5h9Un59xvw"}}
 
 {
     "birthday": "1994-12-24",
@@ -44,8 +44,8 @@ POST {{hostname}}/login
 Content-Type: application/json
 
 {
-    "login": "arrmani88",
-    "password": "qweqwe123"
+    "login": "chzabakh",
+    "password": "qwe123QWE@"
 }
 
 # -------------------------------------------------------------------------
@@ -209,7 +209,7 @@ Authorization: {{token}}
 Content-Type: application/json
 
 {
-    "id": 2
+    "id": 1
 }
 
 # -------------------------------------------------------------------------

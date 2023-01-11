@@ -35,7 +35,7 @@ router.post('/', validateLoginInput, async (req, res) => {
 				return res.json({ error: { "details": "User not found" } })
 			} else {
 				if (result[0].isAccountConfirmed == 0) {
-					return res.status(422).json({ exception: "You didn't confirmed your email address yet, please check your inbox to confirm your account" })
+					return res.status(422).json({ exception: "You didn't confirme your email address yet, please check your inbox to confirm your account" })
 				}
 				bcrypt.compare(password, result[0].password, (error, isMatched) => {
 					if (error) return res.json({ error: error })
