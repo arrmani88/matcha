@@ -1,6 +1,9 @@
 {
+  "scripts": {
+    "start": "nodemon"
+  },
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.1",
@@ -11,8 +14,11 @@
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.6",
-    "nodemon": "^2.0.20",
+    "readable-stream": "^4.5.2",
     "socket.io": "^4.5.1",
     "util": "^0.12.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

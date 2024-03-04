@@ -43,18 +43,19 @@ const validateRegistrationInput = async (req, res, next) => {
         "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? LIMIT 1",
         [username, email],
         (error, result) => {
+          console.log("====>debug");
           if (error) return console.log(error);
           if (result.length == 0) return next();
           else
-            return res.status(409).json({
-              Exception: { Details: "Username or email already used" },
-            });
-        }
-      );
+          return res.status(409).json({
+        Exception: { Details: "Username or email already used" },
+      });
     }
-  } catch (error) {
-    return res.status(400).json(error);
+    );
   }
+} catch (error) {
+  return res.status(400).json(error);
+}
 };
 
 let transporter = nodemailer.createTransport({
@@ -68,15 +69,15 @@ let transporter = nodemailer.createTransport({
 
 router.post("/", validateRegistrationInput, async (req, res) => {
   // router.post("/", async (req, res) => {
-  const { firstName, lastName, username, email, password } = req.body;
-  bcrypt.hash(password, 10).then((hashedPassword) => {
-    dbController.query(
-      "INSERT INTO users(firstName, lastName, username, email, password) VALUES(?,?,?,?,?);",
-      [firstName, lastName, username, email, hashedPassword],
-      (error) => {
-        if (error) return res.status(400).json(error);
-      }
-    );
+    const { firstName, lastName, username, email, password } = req.body;
+    bcrypt.hash(password, 10).then((hashedPassword) => {
+      dbController.query(
+        "INSERT INTO users(firstName, lastName, username, email, password) VALUES(?,?,?,?,?);",
+        [firstName, lastName, username, email, hashedPassword],
+        (error) => {
+          if (error) return res.status(400).json(error);
+        }
+        );
     dbController.query(
       "SELECT * FROM users WHERE username = ?",
       [username],

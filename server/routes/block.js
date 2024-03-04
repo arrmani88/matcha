@@ -4,7 +4,7 @@ const validateToken = require('../middlewares/validate_token')
 const isAccountComplete = require('../middlewares/is_account_complete')
 const dbController = require('../models/db_controller')
 const util = require('util')
-const queryPromise = util.promisify(dbController.query.bind(dbController))
+const queryPromise = util.promisify(dbController.query.bind(dbController));
 
 router.post('/', validateToken, isAccountComplete, async (req, res) => {
 	const { blockedID } = req.body
