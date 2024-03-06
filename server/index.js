@@ -1,4 +1,6 @@
 const express = require("express");
+const mysql = require("mysql");
+const db = require("./models/db_controller");
 const app = express();
 const port = 3001;
 const http = require("http");
@@ -9,7 +11,10 @@ const corsOptions = {
   origin: [process.env.SERVER_HOSTNAME, "http://localhost:3000"],
   optionsSuccessStatus: 200,
 };
+
+
 const corsMiddleware = cors(corsOptions);
+const test_user = require("./routes/test_user");
 const register = require("./routes/register");
 const login = require("./routes/login");
 const completeProfile = require("./routes/complete_profile");
@@ -35,6 +40,7 @@ app.options("*", corsMiddleware);
 app.use(corsMiddleware);
 app.use("/images", express.static("images"));
 app.use("/register", register);
+app.use("/test_user", test_user);
 app.use("/login", login);
 app.use("/complete_profile", completeProfile);
 app.use("/upload_profile_image", uploadProfileImage);

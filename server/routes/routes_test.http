@@ -1,5 +1,5 @@
 @hostname = http://localhost:3001
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxLCJpYXQiOjE2NTU0NzAyNjB9.jwbDc_qdpzlc14n7er7XU1VH8zuByKtBZ-nDNxWnCPo
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiZGVsaGFtaWQiLCJpZCI6MTIxMiwiaWF0IjoxNzA5NzQ1ODAzfQ.KEixo6ZhOZa2GDr-gCSNSsrgloONjdu5SjBVIoEF1Rk
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
 Content-Type: application/json
@@ -244,3 +244,6 @@ GET {{hostname}}/get_me
 Authorization: {{token}}
 
 # -------------------------------------------------------------------------
+
+### -------------------------- POST test user -------------------------
+POST {{hostname}}/test_user
