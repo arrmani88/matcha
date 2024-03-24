@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon",
+    "bsmelah": "nodemon -x 'printf \"\\x1Bc\"; node' index.js"
   },
   "dependencies": {
 		"bcrypt": "^5.1.0",

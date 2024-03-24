@@ -8,10 +8,7 @@ try {
     password: "",
     database: "matcha",
   });
-  console.log("Connected to database");
   module.exports = dbController;
 } catch (err) {
-  console.log("not connected to db");
-  console.log("Error connecting to database");
   console.log(err);
 }
