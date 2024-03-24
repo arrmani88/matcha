@@ -43,8 +43,7 @@ const validateRegistrationInput = async (req, res, next) => {
         "SELECT * FROM users WHERE username LIKE ? OR email LIKE ? LIMIT 1",
         [username, email],
         (error, result) => {
-          console.log("====>debug");
-          if (error) return console.log("error");
+          if (error) return console.log(error);
           if (result.length == 0) return next();
           else
           return res.status(409).json({
@@ -118,4 +117,4 @@ router.post("/", validateRegistrationInput, async (req, res) => {
 });
 
 module.exports = router;
-// https://ethereal.email/
+

@@ -3,9 +3,9 @@ const mysql = require("mysql");
 try {
   const dbController = mysql.createConnection({
     host: "localhost",
-    port: 8080,
+    port: 3307,
     user: "root",
-    password: "root",
+    password: "",
     database: "matcha",
   });
   console.log("Connected to database");

@@ -1,5 +1,5 @@
 @hostname = http://localhost:3001
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFiZGVsaGFtaWQiLCJpZCI6MTIxMiwiaWF0IjoxNzA5NzQ1ODAzfQ.KEixo6ZhOZa2GDr-gCSNSsrgloONjdu5SjBVIoEF1Rk
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFycm1hbmk4OCIsImlkIjoxMDMsImlhdCI6MTcxMTMxODk3MH0.HnIvOcGTDxNdV9JGnuWNNAYuQsd6sKmDzcKB7v-DJO8
 ### ------------------------------- REGISTER -------------------------------
 POST {{hostname}}/register
 Content-Type: application/json
@@ -21,7 +21,7 @@ GET {{hostname}}/confirm_email/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFt
 ### -------------------------- COMPLETE PROFILE ---------------------------
 POST {{hostname}}/complete_profile
 Content-Type: application/json
-Authorization: {{"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNoemFiYWtoIiwiaWQiOjEsImlhdCI6MTY3MjI3NDEwNX0.xgAuoTNs-Y6gGgOKOgcEXMiwtzduWr1FZ5h9Un59xvw"}}
+Authorization: {{token}}
 
 {
     "birthday": "1994-12-24",
@@ -44,8 +44,8 @@ POST {{hostname}}/login
 Content-Type: application/json
 
 {
-    "login": "chzabakh",
-    "password": "qwe123QWE@"
+    "login": "arrmani88",
+    "password": "Q@qweqwe123"
 }
 
 # -------------------------------------------------------------------------
